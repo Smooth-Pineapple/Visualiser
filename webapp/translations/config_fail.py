@@ -24,7 +24,7 @@ class translations:
                     "Euuurgh this feels like such a... offence?"
                 ],'it': [
                     u"Guai a me,", 
-                    u"il software si è rotto !?",
+                    u"il software si è rotto!?",
                     u"Ma puoi comunque cambiare il motivo e i colori,",
                     u"quindi per favore non rinunciare alla speranza.",
                     u"Crea un file 'config.txt'", 
