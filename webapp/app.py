@@ -11,7 +11,7 @@ import threading
 
 from flask import Flask, request, render_template, send_file, send_from_directory, redirect
 from flask_bootstrap import Bootstrap
-from subprocess import check_output
+#from subprocess import check_output
 
 from serv_logging.serv_logging import Logging
 from file_management.file_management import FileManagement
