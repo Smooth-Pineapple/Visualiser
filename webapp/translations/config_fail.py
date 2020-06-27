@@ -39,7 +39,7 @@ class translations:
                     u"",
                     u"Questa è la fine di questa poesia,",
                     u"oh forse solo un'altra rima,",
-                    u"ma accidenti non riesco a pensare a una !?",
+                    u"ma accidenti non riesco a pensare a una!?",
                     u"UFFA, sembra una tale ... offesa?"
                 ]
               }
