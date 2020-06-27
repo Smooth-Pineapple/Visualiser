@@ -1,4 +1,7 @@
+config.txt
+
+__pycache__/
+
 *.zip
 *.log
 *.pyc
-__pycache__/

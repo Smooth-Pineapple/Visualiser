@@ -1,1 +1,0 @@
-{"colour": "rgb(1, 199, 236)", "pattern_type": "1", "ip": "192.168.0.5", "lang": "en"}

@@ -31,7 +31,7 @@ my_path = os.path.dirname(os.path.abspath(__file__))
 
 Bootstrap(app)
 
-colorpicker(app, local=['static/js/spectrum.js', 'static/css/spectrum.css'])
+colorpicker(app, local=['static/js/spectrum.min.js', 'static/css/spectrum.min.css'])
 
 log_path = str(my_path) + '/../log/visualiser_server.log'
 config_path = str(my_path) + '/../config/config.txt'
