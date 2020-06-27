@@ -218,7 +218,7 @@ def not_found(e):
     logger.write(Logging.ERR, str(e) + ": " + request.base_url) 
     config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
     
-    return render_template('/sub_page.html', translations=translations_404, lang=config_data['lang'], img_path='SexyPriest.gif')
+    return render_template('/sub_page.html', translations=translations_404, lang=config_data['lang'], img_path='SexyPriest.gif', have_home=True)
 
 if __name__ == '__main__':
     logger = Logging.getInstance(Logging.DEB)
