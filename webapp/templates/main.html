@@ -4,6 +4,8 @@
       <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
       {{ colorpicker.loader() }}
       {{ colorpicker.picker(ids=['.colorpicker'], color_format='rgb', showAlpha='false', showButtons='true', cancelText=translations.CANCEL[lang], chooseText=translations.CHOOSE[lang]) }}
+      
+      <title>{{translations.VISUALISER_CONFIGURATION[lang]}}</title>
    </head>
    <body>
       

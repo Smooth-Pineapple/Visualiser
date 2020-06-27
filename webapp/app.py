@@ -1,7 +1,3 @@
-#sudo pip install Flask-Colorpicker
-#sudo pip install flask_bootstrap
-#sudo pip install flask
-
 import sys
 sys.path.append("..")
 
@@ -15,7 +11,6 @@ import threading
 
 from flask import Flask, request, render_template, send_file, send_from_directory, redirect
 from flask_bootstrap import Bootstrap
-from flask_colorpicker import colorpicker
 from subprocess import check_output
 
 from serv_logging.serv_logging import Logging
@@ -25,6 +20,7 @@ from webapp.translations._404 import translations as translations_404
 from webapp.translations.shutdown import translations as translations_shutdown
 from webapp.translations.download_fail import translations as translations_download_fail
 from webapp.translations.config_fail import translations as translations_config_fail
+from webapp.flask_colorpicker import colorpicker
 
 app = Flask(__name__)
 my_path = os.path.dirname(os.path.abspath(__file__))
@@ -147,7 +143,7 @@ def submit():
         except Exception as e: 
             logger.write(Logging.ERR, "Error when saving config change: " + str(e)) 
             config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
-            return render_template('/sub_page.html', translations=translations_config_fail, lang=config_data['lang']), 500
+            return render_template('/sub_page.html', translations=translations_config_fail, lang=config_data['lang'], have_home=True), 500
     
     elif 'cancel' in request.form:
         logger.write(Logging.DEB, "Cancel clicked, so reseting page") 
@@ -177,7 +173,7 @@ def download_logs():
         return send_file(log_zip_dir + 'Visualiser_Logs.zip', as_attachment=True)
     except Exception as e: 
         logger.write(Logging.ERR, "Error when downloading logs: " + str(e)) 
-        return render_template('/sub_page.html', translations=translations_download_fail, lang=config_data['lang'], img_path='Huel.gif'), 500
+        return render_template('/sub_page.html', translations=translations_download_fail, lang=config_data['lang'], img_path='Huel.gif', have_home=True), 500
 
 @app.route('/view-server-log')
 def view_server_log():
@@ -211,7 +207,7 @@ def test_sub_page():
         translations = translations_404
         img_path = 'SexyPriest.gif'
 
-    return render_template('/sub_page.html', translations=translations, lang=lang, img_path=img_path, debug=True)
+    return render_template('/sub_page.html', translations=translations, lang=lang, img_path=img_path, debug=True, have_home=True)
 
 @app.route('/favicon.ico')
 def favicon():

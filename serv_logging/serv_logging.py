@@ -1,3 +1,4 @@
+import sys
 import os
 import os.path
 
@@ -43,7 +44,7 @@ class Logging:
             now = datetime.datetime.now()
 
             if level[1] >= self.__level[1]:
-                self.__log_file.write(level[0] + " " + now.strftime("[%Y-%m-%d %H:%M:%S]: ") + message + "\n")
+                self.__log_file.write(level[0] + " " + now.strftime("[%Y-%m-%d %H:%M:%S] ") + sys._getframe(1).f_code.co_name + ": " + message + "\n")
                 self.__log_file.flush()
         else:
             raise Exception("Log file is not open for message: " + message)

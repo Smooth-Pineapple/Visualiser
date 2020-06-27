@@ -1,6 +1,6 @@
-config.txt
-
 __pycache__/
+
+config.txt
 
 *.zip
 *.log

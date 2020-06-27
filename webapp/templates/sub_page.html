@@ -1,13 +1,17 @@
 <html>
    <head>
       <link rel="stylesheet" href="{{ url_for('static', filename='css/sub_page.css') }}">
+
+      <title>{{translations.TITLE[lang]}}</title>
    </head>
    <body>
       <div {% if debug %} class="debug_box" {% endif %}></div>
 
+      {% if have_home %}
       <div class="home_container">
          <a href="/"><img class="home_icon" src="{{url_for('static', filename='/../images/Home.png')}}"></a>
        </div>
+       {% endif %}
 
       <h1 style="color: #12ED9F;">{{translations.TITLE[lang]}}</h1>
       <p>
