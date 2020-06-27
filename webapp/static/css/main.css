@@ -1,0 +1,66 @@
+.rad{
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.rad + img {
+    cursor: pointer;
+}
+
+.rad:checked + img {
+    outline: 2px solid #12ED9F;
+}
+
+.flag {
+    width: 100px;
+    height: 60px;
+}
+
+.flag_border {
+    width: 100px;
+    height: 60px;
+    outline: 2px solid #12ED9F;
+}
+
+/*.rad:hover + img {
+    outline: 2px solid #f0c49b;;
+}*/
+
+[type=submit] {
+    border: 1px solid #12ED9F;
+    padding: 15px 32px;
+    font-size : 30px; 
+    background: whitesmoke;
+    text-decoration-line: none;
+}
+
+[type=submit]:hover {
+    border-color: #f0c49b;
+}
+
+.shutdown {
+    border: 1px solid #12ED9F;
+    padding: 15px 32px;
+    font-size : 30px; 
+    background: #f33333;
+}
+
+.shutdown:hover {
+    border-color: #f0c49b;
+}
+
+
+/*
+[type=button] {
+    border: 1px solid #12ED9F;
+}
+
+[type=button]:hover {
+    border-color: #f0c49b;
+}
+
+.sub:active {
+    border: 1px solid#f0c49b;
+}*/

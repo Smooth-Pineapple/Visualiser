@@ -1,0 +1,20 @@
+<html>
+   <head>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/sub_page.css') }}">
+   </head>
+   <body>
+      <div {% if debug %} class="debug_box" {% endif %}></div>
+
+      <div class="home_container">
+         <a href="/"><img class="home_icon" src="{{url_for('static', filename='/../images/Home.png')}}"></a>
+       </div>
+
+      <h1 style="color: #12ED9F;">{{translations.TITLE[lang]}}</h1>
+      <p>
+         {% for line in translations.MESSAGE[lang] %}
+            {{ line }}<br>
+         {% endfor %}
+      </p>
+      <img {% if img_path %} src="{{url_for('static', filename='/../images/' + img_path)}}" {% else %} class="flag" {% endif %} />
+   </body>
+</html>

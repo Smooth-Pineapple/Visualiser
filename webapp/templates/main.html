@@ -1,0 +1,50 @@
+<html>
+   <head>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+      <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+      {{ colorpicker.loader() }}
+      {{ colorpicker.picker(ids=['.colorpicker'], color_format='rgb', showAlpha='false', showButtons='true', cancelText=translations.CANCEL[lang], chooseText=translations.CHOOSE[lang]) }}
+   </head>
+   <body>
+      
+      <form action="/config-mod" method="POST">
+         <h1 style="color: #12ED9F; text-align:center; font-size: 33px;">{{translations.VISUALISER_CONFIGURATION[lang]}}</h1>
+         
+         <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SELECT_LANGUAGE[lang]}}</h2>
+         <a href="/en"><img {% if lang =="en" %} class="flag_border" {% else %} class="flag" {% endif %} src="{{url_for('static', filename='/../images/English.png')}}"></a>
+         <a href="/it"><img {% if lang =="it" %} class="flag_border" {% else %} class="flag" {% endif %} src="{{url_for('static', filename='/../images/Italian.png')}}"></a>
+     
+         <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SELECT_VISUALISER_PATTERN[lang]}}</h2>
+         <label>
+            <input class="rad" type="radio" name="pattern-options" value="1" {% if config_data[pattern_key] =="1" %} checked {% endif %}>
+            <img src="http://placehold.it/40x60/0bf/fff&text=A">
+         </label>
+
+         <label>
+            <input class="rad" type="radio" name="pattern-options" value="2" {% if config_data[pattern_key] =="2" %} checked {% endif %}>
+            <img src="http://placehold.it/40x60/b0f/fff&text=B">
+         </label>
+
+         <label>
+            <input class="rad" type="radio" name="pattern-options" value="3" {% if config_data[pattern_key] =="3" %} checked {% endif %}>
+            <img src="http://placehold.it/40x60/b0f/fff&text=C">
+         </label>
+         
+         <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SET_COLOUR[lang]}}</h2>
+         <input class='colorpicker' name='colour-picker' value='{{config_data[colour_key]}}'/>
+
+         <p></p>
+
+         <div style="text-align:center;">
+            <input type="submit" name="apply" value="{{translations.APPLY[lang]}}" style="color: #12ED9F;">
+            <input type="submit" name="cancel" value="{{translations.CANCEL[lang]}}" style="color: #12ED9F;">
+         </div>
+      </form>
+      <form action="/shutdown" method="POST" style="text-align:center;">
+         <input type="submit" name="shutdown" value="{{translations.SHUTDOWN[lang]}}" style="color: #12ED9F; background: #f33333;">
+      </form>
+      <a href="/dwn-log" style="float: right; font-size: 10px;">{{translations.DOWNLOAD_LOGS[lang]}}</a> <br>
+      <a href="/view-server-log" style="float: right; font-size: 10px;">{{translations.VIEW_SERVER_LOG[lang]}}</a> <br>
+      <a href="/view-display-log" style="float: right; font-size: 10px;">{{translations.VIEW_DISPLAY_LOG[lang]}}</a>
+   </body>
+</html>
