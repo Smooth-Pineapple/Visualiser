@@ -50,6 +50,11 @@ exit 0
 
 ### Notes
 
+* Install libffi-dev:
+<pre><code>sudo apt-get install libffi-dev</code></pre>
+
+* Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/)
+
 * Includes and modifies 'Flask-Colorpicker' - Ver. 0.9 (https://github.com/mrf345/flask_colorpicker/) to allow custom assignment of picker's 'cancel' and 'choose' buttons.
 
 * Config file format is as follow:
