@@ -11,24 +11,20 @@ import threading
 
 from flask import Flask, request, render_template, send_file, send_from_directory, redirect
 from flask_bootstrap import Bootstrap
-#from subprocess import check_output
 
 from serv_logging.serv_logging import Logging
 from file_management.file_management import FileManagement
-#from webapp.translations.main import translations as translations_main
-#from webapp.translations._404 import translations as translations_404
-#from webapp.translations.shutdown import translations as translations_shutdown
-#from webapp.translations.download_fail import translations as translations_download_fail
-#from webapp.translations.config_fail import translations as translations_config_fail
+from file_management.data_extraction import DataExtraction
+
 from webapp.flask_colorpicker import colorpicker
 
 app = Flask(__name__)
-my_path = os.path.dirname(os.path.abspath(__file__))
 
 Bootstrap(app)
 
 colorpicker(app, local=['static/js/spectrum.min.js', 'static/css/spectrum.min.css'])
 
+my_path = os.path.dirname(os.path.abspath(__file__))
 log_path = str(my_path) + '/../log/visualiser_server.log'
 config_path = str(my_path) + '/../config/config.txt'
 translations_dir_path = str(my_path) + '/translations/'
@@ -42,7 +38,6 @@ def get_ip():
     ip = "None"
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        # doesn't even have to be reachable
         s.connect(('8.8.8.8', 1))
         ip = s.getsockname()[0]
     except Exception as e:
@@ -50,51 +45,6 @@ def get_ip():
     finally:
         s.close()
     return ip
-
-def extract_config_data(config_data):
-    config_error = False
-
-    if colour_key not in config_data:
-        config_data[colour_key] = 'rgba(18,237,159,1)'
-        logger.write(Logging.WAR, "Colour config not present, setting to default") 
-        config_error = True
-    elif not config_data[colour_key]:
-        config_data[colour_key] = 'rgba(0,0,0,0)'
-
-    if pattern_key not in config_data or not config_data[pattern_key]:
-        config_data[pattern_key] = '1'
-        logger.write(Logging.WAR, "Pattern key not present, setting to default") 
-        config_error = True
-
-    rgb_regex = '^rgb\\(\\s*(0|[1-9]\\d?|1\\d\\d?|2[0-4]\\d|25[0-5])%?\\s*,\\s*(0|[1-9]\\d?|1\\d\\d?|2[0-4]\\d|25[0-5])%?\\s*,\\s*(0|[1-9]\\d?|1\\d\\d?|2[0-4]\\d|25[0-5])%?\\s*\\)$'
-    rgba_regex = '^rgba\\(\\s*(0|[1-9]\\d?|1\\d\\d?|2[0-4]\\d|25[0-5])%?\\s*,\\s*(0|[1-9]\\d?|1\\d\\d?|2[0-4]\\d|25[0-5])%?\\s*,\\s*(0|[1-9]\\d?|1\\d\\d?|2[0-4]\\d|25[0-5])%?\\s*,\\s*((0.[1-9])|[01])\\s*\\)$'
-  
-    if not re.match(rgb_regex, config_data[colour_key]):
-        if not re.match(rgba_regex, config_data[colour_key]):
-            config_data[colour_key] = 'rgba(18,237,159,1)'
-            logger.write(Logging.WAR, "Colour config does not match RBG or RGBA, setting to default") 
-            config_error = True
-
-    if is_pattern_config(config_data[pattern_key]) is False:
-        config_data[pattern_key] = '1'
-        logger.write(Logging.WAR, "Pattern key not valid, setting to default")
-        config_error = True
-
-    if config_error is True:
-        FileManagement.write_json(config_path, config_data, log_path)
-
-    return config_data
-
-def is_pattern_config(pattern_config):
-    try:
-        pattern_config_int = int(pattern_config)
-        if pattern_config_int < 1 or pattern_config_int > 3:
-            raise ValueError 
-
-        return True
-    except ValueError:
-        logger.write(Logging.ERR, "Invalid pattern config: " + pattern_config)
-        return False
 
 def shutdown_thread(delay):
     time.sleep(delay)
@@ -104,7 +54,7 @@ def shutdown_thread(delay):
 @app.route('/')
 def index():
     logger.write(Logging.DEB, "Base page") 
-    config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
+    config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
     
     if 'lang' not in config_data or not config_data['lang']:
         config_data['lang'] = 'en'
@@ -128,16 +78,6 @@ def set_lang():
 
     return redirect('/')
 
-"""
-@app.route('/it', methods = ['GET', 'POST'])
-def italian():
-    logger.write(Logging.DEB, "Setting language to Italian") 
-    config_data = {'lang': 'it'}
-    FileManagement.update_json(config_path, config_data, log_path)
-
-    return redirect('/')
-"""
-
 @app.route('/config-mod', methods = ['GET', 'POST'])
 def submit():
     logger.write(Logging.INF, "Applying config") 
@@ -154,7 +94,7 @@ def submit():
             FileManagement.update_json(config_path, config_data, log_path)
         except Exception as e: 
             logger.write(Logging.ERR, "Error when saving config change: " + str(e)) 
-            config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
+            config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
 
             translation_json = {}
             if config_data['lang'] in language_set:
@@ -181,27 +121,27 @@ def submit():
 @app.route('/shutdown', methods = ['GET', 'POST'])
 def shutdown():
     logger.write(Logging.INF, "Attempting shutdown") 
-    config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
+    config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
     try:
         shutdown_T = threading.Thread(target=shutdown_thread, args=(3,))
         shutdown_T.start()
     except Exception as e:
         logger.write(Logging.ERR, "Failed to shutdown: " + str(e)) 
 
-        translation_json = {}
-        if config_data['lang'] in language_set:
-            translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
-        
-        translations_shutdown = {
-            'TITLE': "",
-            'MESSAGE': ""
-        }
+    translation_json = {}
+    if config_data['lang'] in language_set:
+        translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+    
+    translations_shutdown = {
+        'TITLE': "",
+        'MESSAGE': ""
+    }
 
-        if 'TITLE_SHUTDOWN' in translation_json:
-            translations_shutdown['TITLE'] = translation_json['TITLE_SHUTDOWN']
+    if 'TITLE_SHUTDOWN' in translation_json:
+        translations_shutdown['TITLE'] = translation_json['TITLE_SHUTDOWN']
 
-        if 'MESSAGE_SHUTDOWN' in translation_json:
-            translations_shutdown['MESSAGE'] = translation_json['MESSAGE_SHUTDOWN']
+    if 'MESSAGE_SHUTDOWN' in translation_json:
+        translations_shutdown['MESSAGE'] = translation_json['MESSAGE_SHUTDOWN']
 
     return render_template('/sub_page.html', translations=translations_shutdown, lang=config_data['lang'], img_path='hippie.gif')
 
@@ -216,7 +156,7 @@ def download_logs():
     except Exception as e: 
         logger.write(Logging.ERR, "Error when downloading logs: " + str(e)) 
 
-        config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
+        config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
 
         translation_json = {}
         if config_data['lang'] in language_set:
@@ -239,7 +179,7 @@ def download_logs():
 def view_server_log():
     logger.write(Logging.DEB, "View server logs") 
 
-    config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
+    config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
 
     translation_json = {}
     if config_data['lang'] in language_set:
@@ -304,7 +244,7 @@ def favicon():
 def not_found(e):
     logger.write(Logging.ERR, str(e) + ": " + request.base_url) 
 
-    config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
+    config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
     
     translation_json = {}
     if config_data['lang'] in language_set:
