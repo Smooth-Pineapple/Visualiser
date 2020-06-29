@@ -1,0 +1,46 @@
+{
+    "APPLY": "Applicare",
+    "BACK":  "Indietro",
+    "CANCEL": "Annulla",
+    "CHOOSE": "Scegliere",
+    "DOWNLOAD_LOGS": "Scarica Registri",
+    "SELECT_LANGUAGE": "Seleziona la Lingua",
+    "SELECT_VISUALISER_PATTERN": "Seleziona Modella Visualizzatore",
+    "SET_COLOUR": "Imposta il Colore",
+    "SHUTDOWN": "Spegnimento",
+    "VIEW_DISPLAY_LOG": "Visualizza Registro di Visualizzazione",
+    "VIEW_SERVER_LOG": "Visualizza Registro Rerver",
+    "VISUALISER_CONFIGURATION": "Configurazione del Visualizzatore",
+    "TITLE_404": "Wooaaah! Come ci sei arrivato!?",
+    "MESSAGE_404": [
+        "Questa pagina non dovrebbe esistere, ma ecco un piccolo piacere per la tua ricerca:"
+    ],
+    "TITLE_CONFIG_FAIL": "WHOOPS!?",
+    "MESSAGE_CONFIG_FAIL":  [
+        "Guai a me,", 
+        "il software si è rotto!?",
+        "Ma puoi comunque cambiare il motivo e i colori,",
+        "quindi per favore non rinunciare alla speranza.",
+        "Crea un file 'config.txt'", 
+        "come descritto nella guida,",
+        "quindi incollalo sulla scheda SD,",
+        "perché per questa speranza",
+        "non ho mai mentito.",
+        "Ora quando avvierai il visualizzatore",
+        "le tue modifiche saranno necessarie,",
+        "immaginalo come un lancio davvero pesante,",
+        "in un lago blu profondo.",
+        "",
+        "Questa è la fine di questa poesia,",
+        "oh forse solo un'altra rima,",
+        "ma accidenti non riesco a pensare a una!?",
+        "UFFA, sembra una tale ... offesa?"
+    ],
+    "TITLE_DOWNLOAD_FAIL": "NOOOOO!",
+    "MESSAGE_DOWNLOAD_FAIL": [
+        "Mi dispiace, il download non è riuscito per qualche motivo! C'è un modo per aggirare questo però!",
+        "Metti un file chiamato 'COPY-YES' sulla scheda SD (potrebbe esserci già un 'COPY-NO', quindi per favore sostituiscilo). Ora avvia il Visualiser, quindi fermalo, ora sulla scheda SD ci sarà una cartella chiamata 'Visualiser_Logs' che contiene i registri!",
+        "Accidenti! Scusa! Sono molti passaggi! Forse vorrai alcuni rinfreschi per aiutarti a recuperare?..."
+    ],
+    "TITLE_SHUTDOWN": "Ora, Io dissolvo nel etere..."
+}

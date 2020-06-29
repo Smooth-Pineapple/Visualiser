@@ -9,7 +9,7 @@ class FileManagement:
     def write_json(config_path, data_map, log_path):
         logger = Logging.getInstance(Logging.DEB)
         logger.open(log_path)
-        logger.write(Logging.DEB, "Writing config data to file: " + json.dumps(data_map)) 
+        logger.write(Logging.DEB, "Writing config data: " +  json.dumps(data_map) + ", to file: " + config_path) 
         try:
             with open(config_path, 'w') as file:
                 file.write(json.dumps(data_map))
@@ -20,7 +20,7 @@ class FileManagement:
     def update_json(config_path, data_map, log_path):
         logger = Logging.getInstance(Logging.DEB)
         logger.open(log_path)
-        logger.write(Logging.DEB, "Attempting to update config file")  
+        logger.write(Logging.DEB, "Attempting to update config file: " + config_path)  
 
         exist_config = FileManagement.read_json(config_path, log_path)
         if exist_config is not None:
@@ -33,12 +33,12 @@ class FileManagement:
     def read_json(config_path, log_path):
         logger = Logging.getInstance(Logging.DEB)
         logger.open(log_path)
-        logger.write(Logging.DEB, "Reading config data from file") 
+        logger.write(Logging.DEB, "Reading config data from file: " + config_path) 
 
-        data_map = None
+        data_map = {}
 
         try:
-            with open(config_path) as file:
+            with open(config_path, encoding='utf-8') as file:
                 data_map = json.load(file)
 
             logger.write(Logging.DEB, "Read config data from file: " + json.dumps(data_map)) 

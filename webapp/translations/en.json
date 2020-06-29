@@ -1,0 +1,46 @@
+{
+    "APPLY": "Apply",
+    "BACK":  "Back",
+    "CANCEL": "Cancel",
+    "CHOOSE": "Choose",
+    "DOWNLOAD_LOGS": "Download Logs",
+    "SELECT_LANGUAGE": "Select Language",
+    "SELECT_VISUALISER_PATTERN": "Select Visualiser Pattern",
+    "SET_COLOUR": "Set Colour",
+    "SHUTDOWN": "Shutdown",
+    "VIEW_DISPLAY_LOG": "View Display Log",
+    "VIEW_SERVER_LOG": "View Server Log",
+    "VISUALISER_CONFIGURATION": "Visualiser Configuration",
+    "TITLE_404": "Wooaaah! How did you get here!?",
+    "MESSAGE_404": [
+        "This page isn't supposed to exist, but here's a lil' treat for your searching:"
+    ],
+    "TITLE_CONFIG_FAIL": "WHOOPS!?",
+    "MESSAGE_CONFIG_FAIL":  [
+        "O' woe is me,",
+        "the software broke!?",
+        "But you can still change the pattern and colours though,",
+        "so please don't give up hope.",
+        "Create a 'config.txt' file",
+        "as described in the guide,",
+        "then stick it on the SD card,",
+        "because about this hope",
+        "I never lied.",
+        "Now when you start the visualiser",
+        "your changes it will take,",
+        "think of it as throwing a really heavy log,",
+        "in a deep blue lake.",
+        "",
+        "That's the end of this poem,",
+        "oh maybe just one more rhyme,",
+        "but damn I can't think of one!?",
+        "Euuurgh this feels like such a... offence?"
+    ],
+    "TITLE_DOWNLOAD_FAIL": "NOOOOO!",
+    "MESSAGE_DOWNLOAD_FAIL": [
+        "I'm sorry, the download failed for some reason! There's a way around this though!", 
+        "Put a file named 'COPY-YES' on the SD card (There may already be a 'COPY-NO' so please replace it). Now start up the Visualiser, then stop it, now on the SD card there will be a folder called 'Visualiser_Logs' which contains the logs!",
+        "Phew! Sorry! That's a lot of steps! Maybe you'll want some refreshments to help recover?..."
+    ],
+    "TITLE_SHUTDOWN": "Now, I dissolve into the aether..."
+}

@@ -15,11 +15,11 @@ from flask_bootstrap import Bootstrap
 
 from serv_logging.serv_logging import Logging
 from file_management.file_management import FileManagement
-from webapp.translations.main import translations as translations_main
-from webapp.translations._404 import translations as translations_404
-from webapp.translations.shutdown import translations as translations_shutdown
-from webapp.translations.download_fail import translations as translations_download_fail
-from webapp.translations.config_fail import translations as translations_config_fail
+#from webapp.translations.main import translations as translations_main
+#from webapp.translations._404 import translations as translations_404
+#from webapp.translations.shutdown import translations as translations_shutdown
+#from webapp.translations.download_fail import translations as translations_download_fail
+#from webapp.translations.config_fail import translations as translations_config_fail
 from webapp.flask_colorpicker import colorpicker
 
 app = Flask(__name__)
@@ -31,10 +31,12 @@ colorpicker(app, local=['static/js/spectrum.min.js', 'static/css/spectrum.min.cs
 
 log_path = str(my_path) + '/../log/visualiser_server.log'
 config_path = str(my_path) + '/../config/config.txt'
+translations_dir_path = str(my_path) + '/translations/'
 
 ip = 'None'
 colour_key = 'colour'
 pattern_key = 'pattern_type'
+language_set = set()
 
 def get_ip():
     ip = "None"
@@ -108,16 +110,25 @@ def index():
         config_data['lang'] = 'en'
         FileManagement.update_json(config_path, config_data, log_path)
 
-    return render_template('/main.html', colour_key=colour_key, pattern_key=pattern_key, config_data=config_data, translations=translations_main, lang=config_data['lang'])
+    translation_json = {}
+    if config_data['lang'] in language_set:
+        translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
 
-@app.route('/en', methods = ['GET', 'POST'])
-def english():
-    logger.write(Logging.DEB, "Setting language to English") 
-    config_data = {'lang': 'en'}
+    return render_template('/main.html', colour_key=colour_key, pattern_key=pattern_key, config_data=config_data, translations=translation_json, language_set=language_set, lang=config_data['lang'])
+
+@app.route('/set_lang', methods = ['GET', 'POST'])
+def set_lang():
+    lang = 'en'
+    if request.args.get('lang'):
+        lang = request.args.get('lang')
+
+    logger.write(Logging.DEB, "Setting language to: " + lang) 
+    config_data = {'lang': lang}
     FileManagement.update_json(config_path, config_data, log_path)
 
     return redirect('/')
 
+"""
 @app.route('/it', methods = ['GET', 'POST'])
 def italian():
     logger.write(Logging.DEB, "Setting language to Italian") 
@@ -125,6 +136,7 @@ def italian():
     FileManagement.update_json(config_path, config_data, log_path)
 
     return redirect('/')
+"""
 
 @app.route('/config-mod', methods = ['GET', 'POST'])
 def submit():
@@ -143,6 +155,22 @@ def submit():
         except Exception as e: 
             logger.write(Logging.ERR, "Error when saving config change: " + str(e)) 
             config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
+
+            translation_json = {}
+            if config_data['lang'] in language_set:
+                translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+
+            translations_config_fail = {
+                'TITLE': "",
+                'MESSAGE': ""
+            }
+
+            if 'TITLE_CONFIG_FAIL' in translation_json:
+                translations_config_fail['TITLE'] = translation_json['TITLE_CONFIG_FAIL']
+
+            if 'MESSAGE_CONFIG_FAIL' in translation_json:
+                translations_config_fail['MESSAGE'] = translation_json['MESSAGE_CONFIG_FAIL']
+
             return render_template('/sub_page.html', translations=translations_config_fail, lang=config_data['lang'], have_home=True), 500
     
     elif 'cancel' in request.form:
@@ -160,12 +188,26 @@ def shutdown():
     except Exception as e:
         logger.write(Logging.ERR, "Failed to shutdown: " + str(e)) 
 
-    return render_template('/sub_page.html', translations=translations_shutdown, lang=config_data['lang'], img_path='Hippie.gif')
+        translation_json = {}
+        if config_data['lang'] in language_set:
+            translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+        
+        translations_shutdown = {
+            'TITLE': "",
+            'MESSAGE': ""
+        }
+
+        if 'TITLE_SHUTDOWN' in translation_json:
+            translations_shutdown['TITLE'] = translation_json['TITLE_SHUTDOWN']
+
+        if 'MESSAGE_SHUTDOWN' in translation_json:
+            translations_shutdown['MESSAGE'] = translation_json['MESSAGE_SHUTDOWN']
+
+    return render_template('/sub_page.html', translations=translations_shutdown, lang=config_data['lang'], img_path='hippie.gif')
 
 @app.route('/dwn-log',  methods = ['GET', 'POST'])
 def download_logs():
     logger.write(Logging.INF, "Downloading logs") 
-    config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
     log_zip_dir = str(my_path) + '/../'
     try:
         shutil.make_archive(base_dir='log', root_dir=log_zip_dir, format='zip', base_name=log_zip_dir + 'Visualiser_Logs')
@@ -173,41 +215,86 @@ def download_logs():
         return send_file(log_zip_dir + 'Visualiser_Logs.zip', as_attachment=True)
     except Exception as e: 
         logger.write(Logging.ERR, "Error when downloading logs: " + str(e)) 
-        return render_template('/sub_page.html', translations=translations_download_fail, lang=config_data['lang'], img_path='Huel.gif', have_home=True), 500
+
+        config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
+
+        translation_json = {}
+        if config_data['lang'] in language_set:
+            translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+
+        translations_download_fail = {
+            'TITLE': "",
+            'MESSAGE': ""
+        }
+
+        if 'TITLE_DOWNLOAD_FAIL' in translation_json:
+            translations_download_fail['TITLE'] = translation_json['TITLE_DOWNLOAD_FAIL']
+
+        if 'MESSAGE_DOWNLOAD_FAIL' in translation_json:
+            translations_download_fail['MESSAGE'] = translation_json['MESSAGE_DOWNLOAD_FAIL']
+
+        return render_template('/sub_page.html', translations=translations_download_fail, lang=config_data['lang'], img_path='huel.gif', have_home=True), 500
 
 @app.route('/view-server-log')
 def view_server_log():
     logger.write(Logging.DEB, "View server logs") 
+
     config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
 
-    return render_template('/view_logs.html', log=logger.read(), translations=translations_main, lang=config_data['lang'])
+    translation_json = {}
+    if config_data['lang'] in language_set:
+        translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+
+    return render_template('/view_logs.html', log=logger.read(), translations=translation_json, lang=config_data['lang'])
         
 @app.route('/test-sub-page')
 def test_sub_page():
     lang = 'en'
 
     page = request.args.get('page')
-    if request.args.get('lang') == 'en' or request.args.get('lang') == 'it':
+    if request.args.get('lang'):
         lang = request.args.get('lang')
-
+    
     logger.write(Logging.DEB, "Test sub page: " + page) 
 
-    translations = None
+    translation_json = {}
+    if lang in language_set:
+        translation_json = FileManagement.read_json(translations_dir_path + lang + '.json' , log_path)
+
+    translation_sub = {
+        'TITLE': "",
+        'MESSAGE': ""
+    }
     img_path = None 
 
     if page == "dfail":
-        translations = translations_download_fail
-        img_path = 'Huel.gif'
-    elif page == "sdown":
-        translations = translations_shutdown
-        img_path = 'Hippie.gif'
-    elif page == "cfail":
-        translations = translations_config_fail
-    else:
-        translations = translations_404
-        img_path = 'SexyPriest.gif'
+        if 'TITLE_DOWNLOAD_FAIL' in translation_json:
+            translation_sub['TITLE'] = translation_json['TITLE_DOWNLOAD_FAIL']
+        if 'MESSAGE_DOWNLOAD_FAIL' in translation_json:
+            translation_sub['MESSAGE'] = translation_json['MESSAGE_DOWNLOAD_FAIL']
 
-    return render_template('/sub_page.html', translations=translations, lang=lang, img_path=img_path, debug=True, have_home=True)
+        img_path = 'huel.gif'
+    elif page == "sdown":
+        if 'TITLE_SHUTDOWN' in translation_json:
+            translation_sub['TITLE'] = translation_json['TITLE_SHUTDOWN']
+        if 'MESSAGE_SHUTDOWN' in translation_json:
+            translation_sub['MESSAGE'] = translation_json['MESSAGE_SHUTDOWN']
+
+        img_path = 'hippie.gif'
+    elif page == "cfail":
+        if 'TITLE_CONFIG_FAIL' in translation_json:
+            translation_sub['TITLE'] = translation_json['TITLE_CONFIG_FAIL']
+        if 'MESSAGE_CONFIG_FAIL' in translation_json:
+            translation_sub['MESSAGE'] = translation_json['MESSAGE_CONFIG_FAIL']
+    else:
+        if 'TITLE_404' in translation_json:
+            translation_sub['TITLE'] = translation_json['TITLE_404']
+        if 'MESSAGE_404' in translation_json:
+            translation_sub['MESSAGE'] = translation_json['MESSAGE_404']
+
+        img_path = 'sexy_priest.gif'
+
+    return render_template('/sub_page.html', translations=translation_sub, lang=lang, img_path=img_path, debug=True, have_home=True)
 
 @app.route('/favicon.ico')
 def favicon():
@@ -216,9 +303,25 @@ def favicon():
 @app.errorhandler(404)
 def not_found(e):
     logger.write(Logging.ERR, str(e) + ": " + request.base_url) 
+
     config_data = extract_config_data(FileManagement.read_json(config_path, log_path))
     
-    return render_template('/sub_page.html', translations=translations_404, lang=config_data['lang'], img_path='SexyPriest.gif', have_home=True)
+    translation_json = {}
+    if config_data['lang'] in language_set:
+        translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+
+    translations_404 = {
+        'TITLE': "",
+        'MESSAGE': ""
+    }
+
+    if 'TITLE_404' in translation_json:
+        translations_404['TITLE'] = translation_json['TITLE_404']
+
+    if 'MESSAGE_404' in translation_json:
+        translations_404['MESSAGE'] = translation_json['MESSAGE_404']
+
+    return render_template('/sub_page.html', translations=translations_404, lang=config_data['lang'], img_path='sexy_priest.gif', have_home=True)
 
 if __name__ == '__main__':
     logger = Logging.getInstance(Logging.DEB)
@@ -234,6 +337,11 @@ if __name__ == '__main__':
                 ip = sys.argv[1]
                 logger.write(Logging.INF, "IP address passed from rc.local: " + ip) 
             
+
+    for file in os.listdir(translations_dir_path):
+        if file.endswith('.json'):
+            language_set.add(os.path.splitext(file)[0])
+
     if ip is None:
         for attempt in range(10):
             try: 
