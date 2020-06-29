@@ -64,7 +64,7 @@ class Logging:
     def fileSizeCheck(self):
         if os.path.isfile(self.__path_str):
             file_size_b = os.stat(self.__path_str).st_size
-            if file_size_b > 100000:
+            if file_size_b > 5242880: #5mb
                 self.close()
 
                 f = open(self.__path_str, 'w')

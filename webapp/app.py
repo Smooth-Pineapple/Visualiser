@@ -11,15 +11,9 @@ import threading
 
 from flask import Flask, request, render_template, send_file, send_from_directory, redirect
 from flask_bootstrap import Bootstrap
-#from subprocess import check_output
 
 from serv_logging.serv_logging import Logging
 from file_management.file_management import FileManagement
-#from webapp.translations.main import translations as translations_main
-#from webapp.translations._404 import translations as translations_404
-#from webapp.translations.shutdown import translations as translations_shutdown
-#from webapp.translations.download_fail import translations as translations_download_fail
-#from webapp.translations.config_fail import translations as translations_config_fail
 from webapp.flask_colorpicker import colorpicker
 
 app = Flask(__name__)
@@ -128,16 +122,6 @@ def set_lang():
 
     return redirect('/')
 
-"""
-@app.route('/it', methods = ['GET', 'POST'])
-def italian():
-    logger.write(Logging.DEB, "Setting language to Italian") 
-    config_data = {'lang': 'it'}
-    FileManagement.update_json(config_path, config_data, log_path)
-
-    return redirect('/')
-"""
-
 @app.route('/config-mod', methods = ['GET', 'POST'])
 def submit():
     logger.write(Logging.INF, "Applying config") 
@@ -188,20 +172,20 @@ def shutdown():
     except Exception as e:
         logger.write(Logging.ERR, "Failed to shutdown: " + str(e)) 
 
-        translation_json = {}
-        if config_data['lang'] in language_set:
-            translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+    translation_json = {}
+    if config_data['lang'] in language_set:
+        translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
         
-        translations_shutdown = {
-            'TITLE': "",
-            'MESSAGE': ""
-        }
+    translations_shutdown = {
+        'TITLE': "",
+        'MESSAGE': ""
+    }
 
-        if 'TITLE_SHUTDOWN' in translation_json:
-            translations_shutdown['TITLE'] = translation_json['TITLE_SHUTDOWN']
+    if 'TITLE_SHUTDOWN' in translation_json:
+        translations_shutdown['TITLE'] = translation_json['TITLE_SHUTDOWN']
 
-        if 'MESSAGE_SHUTDOWN' in translation_json:
-            translations_shutdown['MESSAGE'] = translation_json['MESSAGE_SHUTDOWN']
+    if 'MESSAGE_SHUTDOWN' in translation_json:
+        translations_shutdown['MESSAGE'] = translation_json['MESSAGE_SHUTDOWN']
 
     return render_template('/sub_page.html', translations=translations_shutdown, lang=config_data['lang'], img_path='hippie.gif')
 
