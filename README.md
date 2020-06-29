@@ -53,7 +53,8 @@ exit 0
 * Install libffi-dev:
 <pre><code>sudo apt-get install libffi-dev</code></pre>
 
-* Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/)
+* Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/) and updated RaspberryPi '~/.bashrc' with: 
+<pre><code>alias python='/usr/local/bin/python3'</code></pre>
 
 * Includes and modifies 'Flask-Colorpicker' - Ver. 0.9 (https://github.com/mrf345/flask_colorpicker/) to allow custom assignment of picker's 'cancel' and 'choose' buttons.
 
