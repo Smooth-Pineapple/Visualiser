@@ -9,7 +9,6 @@
 ### Installation
 
 Installation is not necessary, but the following script can act as a set-up script for using the Visualiser webapp on a RaspberryPi:
-
 <pre><code>
 #!/bin/bash
 
@@ -51,15 +50,23 @@ exit 0
 ### Notes
 
 * Install libffi-dev:
-<pre><code>sudo apt-get install libffi-dev</code></pre>
+    <pre><code>sudo apt-get install libffi-dev</code></pre>
+
 
 * Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/) and updated RaspberryPi '~/.bashrc' with: 
-<pre><code>alias python='/usr/local/bin/python3'</code></pre>
+    <pre><code>alias python='/usr/local/bin/python3'</code></pre>
+
+* If Python 2.x exists remove like so:
+    <pre><code>
+    cd /etc
+    sudo apt-get remove python2.7
+    sudo apt-get autoremove
+    </code></pre>
 
 * Includes and modifies 'Flask-Colorpicker' - Ver. 0.9 (https://github.com/mrf345/flask_colorpicker/) to allow custom assignment of picker's 'cancel' and 'choose' buttons.
 
 * Config file format is as follow:
 
-<pre><code>
-{"colour": "rgb([0-255], [0-255], [0-255])", "pattern_type": "[1/2/3]", "ip": "[IP ADDRESS]", "lang": "[en/it]"}
-</code></pre>
+    <pre><code>
+    {"colour": "rgb([0-255], [0-255], [0-255])", "pattern_type": "[1/2/3]", "ip": "[IP ADDRESS]", "lang": "[en/it]"}
+    </code></pre>
