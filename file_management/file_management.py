@@ -1,3 +1,4 @@
+import io
 import os
 import os.path
 import json
@@ -38,7 +39,7 @@ class FileManagement:
         data_map = {}
 
         try:
-            with open(config_path, encoding='utf-8') as file:
+            with io.open(config_path, encoding='utf-8') as file:
                 data_map = json.load(file)
 
             logger.write(Logging.DEB, "Read config data from file: " + json.dumps(data_map)) 
