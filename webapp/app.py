@@ -249,9 +249,9 @@ def view_server_log():
         
 @app.route('/test-sub-page')
 def test_sub_page():
-    lang = 'en'
-
     page = request.args.get('page')
+    
+    lang = 'en'
     if request.args.get('lang'):
         lang = request.args.get('lang')
     
