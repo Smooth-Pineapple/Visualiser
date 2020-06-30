@@ -57,7 +57,7 @@ def index():
     config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
     
     if 'lang' not in config_data or not config_data['lang']:
-        config_data['lang'] = 'en'
+        config_data['lang'] = 'it'
         FileManagement.update_json(config_path, config_data, log_path)
 
     translation_json = {}
@@ -68,7 +68,7 @@ def index():
 
 @app.route('/set_lang', methods = ['GET', 'POST'])
 def set_lang():
-    lang = 'en'
+    lang = 'it'
     if request.args.get('lang'):
         lang = request.args.get('lang')
 
@@ -191,7 +191,7 @@ def view_server_log():
 def test_sub_page():
     page = request.args.get('page')
     
-    lang = 'en'
+    lang = 'it'
     if request.args.get('lang'):
         lang = request.args.get('lang')
     
