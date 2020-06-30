@@ -24,7 +24,7 @@ class DataExtraction:
             return False   
 
     @staticmethod
-    def __verify_config_data(config_data, colour_key, pattern_key, log_path):
+    def verify_config_data(config_data, colour_key, pattern_key, log_path):
         logger = Logging.getInstance(Logging.DEB)
         logger.open(log_path)
         
@@ -58,10 +58,10 @@ class DataExtraction:
         logger = Logging.getInstance(Logging.DEB)
         logger.open(log_path)
 
-        config_data, config_error = DataExtraction.__verify_config_data(config_data, colour_key, pattern_key, log_path)
+        config_data, config_error = DataExtraction.verify_config_data(config_data, colour_key, pattern_key, log_path)
 
         if config_error is True:
             FileManagement.write_json(config_path, config_data, log_path)
-            logger.write(Logging.WAR, "Error in config data requiring update") 
+            logger.write(Logging.WAR, "Error in config data so updated file") 
 
         return config_data

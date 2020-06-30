@@ -29,22 +29,22 @@ log_path = str(my_path) + '/../log/visualiser_server.log'
 config_path = str(my_path) + '/../config/config.txt'
 translations_dir_path = str(my_path) + '/translations/'
 
-ip = 'None'
+ip = None
 colour_key = 'colour'
 pattern_key = 'pattern_type'
 language_set = set()
 
 def get_ip():
-    ip = "None"
+    _ip = None
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         s.connect(('8.8.8.8', 1))
-        ip = s.getsockname()[0]
+        _ip = s.getsockname()[0]
     except Exception as e:
         logger.write(Logging.ERR, "Error when getting IP: " + str(e)) 
     finally:
         s.close()
-    return ip
+    return _ip
 
 def shutdown_thread(delay):
     time.sleep(delay)
@@ -267,7 +267,7 @@ if __name__ == '__main__':
     logger = Logging.getInstance(Logging.DEB)
     logger.open(log_path)
     
-    ip = None
+    #ip = None
     cmd_arg = sys.argv 
     logger.write(Logging.DEB, "Sys arg: " + str(cmd_arg)) 
     if len(cmd_arg) > 1: 
