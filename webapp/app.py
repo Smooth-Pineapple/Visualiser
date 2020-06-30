@@ -54,7 +54,7 @@ def shutdown_thread(delay):
 @app.route('/')
 def index():
     logger.write(Logging.DEB, "Base page") 
-    config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
     
     if 'lang' not in config_data or not config_data['lang']:
         config_data['lang'] = 'en'
@@ -94,7 +94,7 @@ def submit():
             FileManagement.update_json(config_path, config_data, log_path)
         except Exception as e: 
             logger.write(Logging.ERR, "Error when saving config change: " + str(e)) 
-            config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
+            config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
 
             translation_json = {}
             if config_data['lang'] in language_set:
@@ -121,7 +121,7 @@ def submit():
 @app.route('/shutdown', methods = ['GET', 'POST'])
 def shutdown():
     logger.write(Logging.INF, "Attempting shutdown") 
-    config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
     try:
         shutdown_T = threading.Thread(target=shutdown_thread, args=(3,))
         shutdown_T.start()
@@ -156,7 +156,7 @@ def download_logs():
     except Exception as e: 
         logger.write(Logging.ERR, "Error when downloading logs: " + str(e)) 
 
-        config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
+        config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
 
         translation_json = {}
         if config_data['lang'] in language_set:
@@ -179,7 +179,7 @@ def download_logs():
 def view_server_log():
     logger.write(Logging.DEB, "View server logs") 
 
-    config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
 
     translation_json = {}
     if config_data['lang'] in language_set:
@@ -244,7 +244,7 @@ def favicon():
 def not_found(e):
     logger.write(Logging.ERR, str(e) + ": " + request.base_url) 
 
-    config_data = DataExtraction.extract_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
     
     translation_json = {}
     if config_data['lang'] in language_set:
@@ -286,11 +286,18 @@ if __name__ == '__main__':
         for attempt in range(10):
             try: 
                 ip = get_ip()
-                logger.write(Logging.INF, "IP address found socket: " + ip) 
+                if ip is not None:
+                    logger.write(Logging.INF, "IP address found socket: " + ip) 
+
+                    FileManagement.update_json(config_path, {'ip': ip}, log_path)
+                    app.run(debug=True, host='0.0.0.0')
+
+                    break
+                
             except Exception as e: 
                 logger.write(Logging.ERR, "Unable to get Hostname and IP: " + str(e)) 
 
             time.sleep(1)
-    
-    FileManagement.update_json(config_path, {'ip': ip}, log_path)
-    app.run(debug=True, host='0.0.0.0')
+
+        if ip is None:
+            FileManagement.update_json(config_path, {'ip': ''}, log_path)
