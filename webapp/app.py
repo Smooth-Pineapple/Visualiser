@@ -1,3 +1,7 @@
+#pip install watchdog
+#pip install Pillow if needed
+#https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices
+
 import sys
 sys.path.append("..")
 
