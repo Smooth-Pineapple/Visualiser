@@ -18,11 +18,6 @@
             <a href="/set_lang?lang={{lan}}"><img {% if lang == lan %} class="flag_border" {% else %} class="flag" {% endif %} src="{{url_for('static', filename='/../images/' + lan + '.png')}}"></a>
          {% endfor %}
 
-         <!--
-         <a href="/en"><img {% if lang =="en" %} class="flag_border" {% else %} class="flag" {% endif %} src="{{url_for('static', filename='/../images/en.png')}}"></a>
-         <a href="/it"><img {% if lang =="it" %} class="flag_border" {% else %} class="flag" {% endif %} src="{{url_for('static', filename='/../images/it.png')}}"></a>
-         -->
-
          <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SELECT_VISUALISER_PATTERN}}</h2>
          <label>
             <input class="rad" type="radio" name="pattern-options" value="1" {% if config_data[pattern_key] =="1" %} checked {% endif %}>
@@ -39,8 +34,12 @@
             <img src="http://placehold.it/40x60/b0f/fff&text=C">
          </label>
          
+         <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SET_BRIGHTNESS}}</h2>
+         <input type="range" min="0" max="100" name="colour-brightness" id="brightnessSet" value='{{config_data[brightness_key]}}' oninput="brightnessGet.value = brightnessSet.value"/>
+         <output style="color: #12ED9F; font-size: 30px; vertical-align: top;" name="colour-brightness-display" id="brightnessGet">{{config_data[brightness_key]}}</output>
+
          <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SET_COLOUR}}</h2>
-         <input class='colorpicker' name='colour-picker' value='{{config_data[colour_key]}}'/>
+         <input class='colorpicker' name="colour-picker" value='{{config_data[colour_key]}}'/>
 
          <p></p>
 

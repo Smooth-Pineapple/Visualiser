@@ -12,6 +12,7 @@ import flask
 import re
 import time
 import threading
+import atexit
 
 from flask import Flask, request, render_template, send_file, send_from_directory, redirect
 from flask_bootstrap import Bootstrap
@@ -36,6 +37,8 @@ translations_dir_path = str(my_path) + '/translations/'
 ip = None
 colour_key = 'colour'
 pattern_key = 'pattern_type'
+brightness_key = 'brightness'
+
 language_set = set()
 
 def get_ip():
@@ -53,12 +56,13 @@ def get_ip():
 def shutdown_thread(delay):
     time.sleep(delay)
     logger.write(Logging.INF, "Shutdown delay passed")
+    logger.close()
     os.system('sudo shutdown -h now')
 
 @app.route('/')
 def index():
     logger.write(Logging.DEB, "Base page") 
-    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, config_path, log_path)
     
     if 'lang' not in config_data or not config_data['lang']:
         config_data['lang'] = 'it'
@@ -68,7 +72,7 @@ def index():
     if config_data['lang'] in language_set:
         translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
 
-    return render_template('/main.html', colour_key=colour_key, pattern_key=pattern_key, config_data=config_data, translations=translation_json, language_set=language_set, lang=config_data['lang'])
+    return render_template('/main.html', colour_key=colour_key, pattern_key=pattern_key, brightness_key=brightness_key, config_data=config_data, translations=translation_json, language_set=language_set, lang=config_data['lang'])
 
 @app.route('/set_lang', methods = ['GET', 'POST'])
 def set_lang():
@@ -89,16 +93,18 @@ def submit():
         try:
             colour = request.form.get('colour-picker')
             pattern_type = request.form.getlist('pattern-options')
+            brightness = request.form.get('colour-brightness')
+
             if pattern_type is not None and len(pattern_type) > 0:
                 pattern_type = pattern_type[0]
     
-            logger.write(Logging.DEB, "Config change: " + colour + ", " + pattern_type) 
-            config_data = {colour_key: colour, pattern_key: pattern_type, 'ip': ip}
+            logger.write(Logging.DEB, "Config change: " + colour + ", " + pattern_type + ", " + brightness)  
+            config_data = {colour_key: colour, pattern_key: pattern_type, 'brightness': brightness, 'ip': ip}
 
             FileManagement.update_json(config_path, config_data, log_path)
         except Exception as e: 
             logger.write(Logging.ERR, "Error when saving config change: " + str(e)) 
-            config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
+            config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, config_path, log_path)
 
             translation_json = {}
             if config_data['lang'] in language_set:
@@ -125,9 +131,9 @@ def submit():
 @app.route('/shutdown', methods = ['GET', 'POST'])
 def shutdown():
     logger.write(Logging.INF, "Attempting shutdown") 
-    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, config_path, log_path)
     try:
-        shutdown_T = threading.Thread(target=shutdown_thread, args=(3,))
+        shutdown_T = threading.Thread(target=shutdown_thread, args=(5,))
         shutdown_T.start()
     except Exception as e:
         logger.write(Logging.ERR, "Failed to shutdown: " + str(e)) 
@@ -160,7 +166,7 @@ def download_logs():
     except Exception as e: 
         logger.write(Logging.ERR, "Error when downloading logs: " + str(e)) 
 
-        config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
+        config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, config_path, log_path)
 
         translation_json = {}
         if config_data['lang'] in language_set:
@@ -183,14 +189,26 @@ def download_logs():
 def view_server_log():
     logger.write(Logging.DEB, "View server logs") 
 
-    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, config_path, log_path)
 
     translation_json = {}
     if config_data['lang'] in language_set:
         translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
 
     return render_template('/view_logs.html', log=logger.read(), translations=translation_json, lang=config_data['lang'])
-        
+
+@app.route('/view-display-log')
+def view_display_log():
+    logger.write(Logging.DEB, "View display logs") 
+
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, config_path, log_path)
+
+    translation_json = {}
+    if config_data['lang'] in language_set:
+        translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+
+    return render_template('/view_logs.html', log=FileManagement.read_file(str(my_path) + '/../log/visualiser_display.log'), translations=translation_json, lang=config_data['lang'])
+                
 @app.route('/test-sub-page')
 def test_sub_page():
     page = request.args.get('page')
@@ -248,7 +266,7 @@ def favicon():
 def not_found(e):
     logger.write(Logging.ERR, str(e) + ": " + request.base_url) 
 
-    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, config_path, log_path)
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, config_path, log_path)
     
     translation_json = {}
     if config_data['lang'] in language_set:
@@ -305,3 +323,9 @@ if __name__ == '__main__':
 
         if ip is None:
             FileManagement.update_json(config_path, {'ip': ''}, log_path)
+
+def exit_handler():
+    if logger is not None:
+        logger.close()
+
+atexit.register(exit_handler)

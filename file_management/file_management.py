@@ -47,3 +47,11 @@ class FileManagement:
             logger.write(Logging.ERR, "Cannot open file to read data: " + str(e))    
 
         return data_map
+
+    @staticmethod 
+    def read_file(file_path):
+        if file_path is not None:
+            with(open(file_path, 'r')) as file:
+                return file.read().splitlines()
+        else:
+            raise Exception("Cannot read: " + file_path)

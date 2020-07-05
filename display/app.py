@@ -9,7 +9,7 @@ from file_management.file_management import FileManagement
 from file_management.data_extraction import DataExtraction
 
 my_path = os.path.dirname(os.path.abspath(__file__))
-log_path = str(my_path) + '/../log/visualiser_server.log'
+log_path = str(my_path) + '/../log/visualiser_display.log'
 config_path = str(my_path) + '/../config/config.txt'
 
 ip = None
@@ -18,12 +18,13 @@ pattern = None
 
 colour_key = 'colour'
 pattern_key = 'pattern_type'
+brightness_key = 'brightness'
 
 if __name__ == '__main__':
     logger = Logging.getInstance(Logging.DEB)
     logger.open(log_path)
 
-    config_data, config_error = DataExtraction.verify_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, log_path)
+    config_data, config_error = DataExtraction.verify_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, log_path)
 
     if 'ip' not in config_data or config_data['ip'] is None:
         logger.write(Logging.ERR, "IP address not found in config, please refer to guide to manually set config data and retrieve logs")
@@ -44,6 +45,7 @@ if __name__ == '__main__':
 
     colour = config_data[colour_key]
     pattern = config_data[pattern_key]
+    brightness = config_data[brightness_key]
 
-    logger.write(Logging.INF, "Extracted config data- IP: " + ip + ", Colour: " + colour + ", Pattern: " + pattern) 
-    print("Extracted config data- IP: " + ip + ", Colour: " + colour + ", Pattern: " + pattern)
+    logger.write(Logging.INF, "Extracted config data- IP: " + ip + ", Colour: " + colour + ", Pattern: " + pattern + ", Brightness: " + brightness) 
+    print("Extracted config data- IP: " + ip + ", Colour: " + colour + ", Pattern: " + pattern + ", Brightness: " + brightness)
