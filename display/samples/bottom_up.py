@@ -79,8 +79,10 @@ class BottomUp(SampleBase):
             time.sleep(0.1)
             offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
 
+"""
 # Main function
 if __name__ == "__main__":
     rotating_block_generator = BottomUp()
     if (not rotating_block_generator.process()):
         rotating_block_generator.print_help()
+""""
