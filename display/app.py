@@ -58,9 +58,15 @@ def get_config(parse_ip):
 def load_display(parse_ip):
     ip, colour, pattern, brightness = get_config(parse_ip)
     
-    #if pattern
-    display_pattern = BottomUp()
-    display_pattern.run()
+    #if ip is not None:
+    #   show symbol
+
+    display_pattern = None
+    if pattern is '1':
+        display_pattern = BottomUp() #pass colour and brightness
+
+    if pattern is not None:
+        display_pattern.run()
 
 
 if __name__ == '__main__':
