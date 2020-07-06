@@ -1,23 +1,35 @@
-from samplebase import SampleBase
 import math
 import time
 import random
+import re
+
 from datetime import datetime
 
+from display.control.samplebase import SampleBase
+
 class BottomUp(SampleBase):
-    def __init__(self, *args, **kwargs):
+    def __init__(self,  colour, brightness, *args, **kwargs):
         super(BottomUp, self).__init__(*args, **kwargs)
+
+        rgb = []
+        for s in re.findall(r'\b\d+\b', colour):
+            rgb.append(int(s))
+
+        self.colour = rgb
+
+        self.brightness = int(brightness)
 
     def drawBarRow(self, offset_canvas, bar, y, r, g, b, bar_width, height):
         for x in range(bar * bar_width, (bar + 1) * bar_width):
             offset_canvas.SetPixel(x, height - 1 - y, r, g, b)
 
     def run(self):
-        num_bars = 8
+        num_bars = 16
 
         width = self.matrix.width
         height = self.matrix.height
-        self.matrix.brightness = 4
+
+        self.matrix.brightness = self.brightness
 
         bar_width = width / num_bars
         bar_heights = [None] * num_bars
@@ -61,7 +73,7 @@ class BottomUp(SampleBase):
                 y = 0
                 for i in range(0, int(bar_heights[x])):
                     y = i
-                    
+                    """
                     if y < height_green:
                         self.drawBarRow(offset_canvas, x, y, 0, 200, 0, bar_width, height)
                     elif y < height_yellow:
@@ -69,8 +81,9 @@ class BottomUp(SampleBase):
                     elif y < height_orange:
                         self.drawBarRow(offset_canvas, x, y, 250, 100, 0, bar_width, height)
                     else:
-                    
-                        self.drawBarRow(offset_canvas, x, y, 200, 0, 0, bar_width, height)
+                    """
+                    self.colour
+                    self.drawBarRow(offset_canvas, x, y, self.colour[0], self.colour[1], self.colour[2], bar_width, height)
 
                 for k in range(y, height):
                     y = k
@@ -79,10 +92,6 @@ class BottomUp(SampleBase):
             time.sleep(0.1)
             offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
 
-"""
-# Main function
-if __name__ == "__main__":
-    rotating_block_generator = BottomUp()
-    if (not rotating_block_generator.process()):
-        rotating_block_generator.print_help()
-""""
+    def stop(self):
+        super.stop()
+

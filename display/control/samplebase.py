@@ -3,9 +3,7 @@ import time
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/..'))
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
-
+from display.rgbmatrix import RGBMatrix, RGBMatrixOptions
 
 class SampleBase(object):
     def __init__(self, *args, **kwargs):
@@ -71,3 +69,6 @@ class SampleBase(object):
             sys.exit(0)
 
         return True
+    
+    def stop(self):
+        sys.exit(0)
