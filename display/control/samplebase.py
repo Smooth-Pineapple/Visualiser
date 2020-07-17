@@ -60,15 +60,6 @@ class SampleBase(object):
 
         self.matrix = RGBMatrix(options = options)
 
-        try:
-            # Start loop
-            #print("Press CTRL-C to stop sample")
-            self.run()
-        except KeyboardInterrupt:
-            print("Exiting\n")
-            sys.exit(0)
+        self.run()
 
         return True
-    
-    #def stop(self):
-    #    sys.exit(0)

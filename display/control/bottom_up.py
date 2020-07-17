@@ -29,7 +29,6 @@ class BottomUp(SampleBase):
             offset_canvas.SetPixel(x, height - 1 - y, r, g, b)
 
     def run(self):
-        print("RROOON")
         num_bars = 16
 
         width = self.matrix.width
@@ -60,7 +59,6 @@ class BottomUp(SampleBase):
         offset_canvas = self.matrix.CreateFrameCanvas()
 
         t = 0
-        print("YOYOYO " + str(BottomUp.STOP_LOOP))
         while not BottomUp.STOP_LOOP:
             if t % 8 == 0:
                 for x in range(0, num_bars):
@@ -101,5 +99,4 @@ class BottomUp(SampleBase):
 
     @staticmethod 
     def stop():
-        print("STOP ACTIVATED")
         BottomUp.STOP_LOOP = True

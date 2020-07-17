@@ -4,6 +4,8 @@
  * Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/) 
  * flask - Ver. 1.1.2 (https://palletsprojects.com/p/flask/)
  * flask-bootstrap - Ver. 3.3.7.1 (https://github.com/mbr/flask-bootstrap)
+ * Watchdog - Ver. 0.10.3 (https://github.com/gorakhargosh/watchdog)
+ * Pillow - Ver. 2.2.2 (https://python-imaging.github.io/)
 
 ### Installation
 
@@ -83,8 +85,8 @@ exit 0
 
 ### Specific Prerequisites
  * Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/) 
- * flask - Ver. 1.1.2 (https://palletsprojects.com/p/flask/)
- * flask-bootstrap - Ver. 3.3.7.1 (https://github.com/mbr/flask-bootstrap)
+ * Flask - Ver. 1.1.2 (https://palletsprojects.com/p/flask/)
+ * Flask-bootstrap - Ver. 3.3.7.1 (https://github.com/mbr/flask-bootstrap)
 
 ### Notes
 
@@ -92,3 +94,14 @@ exit 0
 
 * Config file format is as follow:
 	<pre><code>{"colour": "rgb([0-255], [0-255], [0-255])", "pattern_type": "[1/2/3]", "ip": "[IP ADDRESS]", "lang": "[en/it]"}</code></pre>
+
+## Display
+
+### Specific Prerequisites
+ * Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/) 
+ * Watchdog - Ver. 0.10.3 (https://github.com/gorakhargosh/watchdog)
+ * Pillow - Ver. 2.2.2 (https://python-imaging.github.io/)
+
+### Notes
+
+* Installation process and C++ libraries for controlling RGB Matrix HAT found at: https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices

@@ -24,13 +24,6 @@
     outline: 2px solid #12ED9F;
 }
 
-.range_symbols {
-    color: #12ED9F; 
-    font-size: 30px; 
-    vertical-align: top;
-    text-align: center;
-}
-
 [type=submit] {
     border: 1px solid #12ED9F;
     padding: 15px 32px;

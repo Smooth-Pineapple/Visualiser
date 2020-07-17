@@ -10,6 +10,7 @@ from file_management.file_management import FileManagement
 from file_management.data_extraction import DataExtraction
 from file_management.watch_config import WatchdogConfig
 from display.control.bottom_up import BottomUp
+from display.control.network_notification import NetworkNotification
 
 my_path = os.path.dirname(os.path.abspath(__file__))
 log_path = str(my_path) + '/../../log/visualiser_display.log'
@@ -25,7 +26,6 @@ class Control():
 
     def get_config(self, parse_ip):
         config_data, config_error = DataExtraction.verify_config_data(FileManagement.read_json(config_path, log_path), self.colour_key, self.pattern_key, self.brightness_key, log_path)
-        #config_data, config_error = DataExtraction.verify_config_data(FileManagement.read_json(config_path, log_path), self.colour_key, self.pattern_key, self.brightness_key, log_path)
 
         ip = None
 
@@ -58,28 +58,24 @@ class Control():
     def stop(self):
         BottomUp.stop()
 
-    def load_display(self, parse_ip):
-        print("LOAD")
-        ip, colour, pattern, brightness = self.get_config(parse_ip)
+    def ip_check_display(self):
+        ip, _, _, brightness = self.get_config(True)
+	
+        have_ip = True
+        if ip == "No IP":
+	        have_ip = False
+        
+        NetworkNotification(have_ip=have_ip, brightness=brightness).process()
 
-        #if ip is not None:
-        #   show symbol
-        print(ip, colour, pattern, brightness)
-        #if self.display_pattern is not None:
-        #    print("TRY")
-        #    self.display_pattern.stop()
-        #    self.display_pattern = None
+    def load_display(self, parse_ip):
+        _, colour, pattern, brightness = self.get_config(parse_ip)
 
         if pattern == '1':
             self.display_pattern = BottomUp(colour=colour, brightness=brightness)
 
         
         if self.display_pattern is not None:
-            print("STRT")
-            #display_thread = threading.Thread(target=self.display_pattern.process)
-            #display_thread.start()
             self.display_pattern.process()
-            print("STUUP")
             
 
 
@@ -90,26 +86,13 @@ if __name__ == '__main__':
     control = Control()
 
     monitor_config = WatchdogConfig(control.stop, config_dir, '*.txt', '', True, False, False, log_path)
-    #monitor_config.start_observing()
     monitor_thread = threading.Thread(target=monitor_config.start_observing)
     monitor_thread.start()
     
 
     try:
+        control.ip_check_display()
         while True:
             control.load_display(False)
     except KeyboardInterrupt:
-        print("END")
         sys.exit(0)
-
-
-    
-    """
-    try:
-        monitor_thread.start()
-    except Exception as e:
-        logger.write(Logging.ERR, "Display thread stopped: " + str(e)) 
-    """
-
-    
-      

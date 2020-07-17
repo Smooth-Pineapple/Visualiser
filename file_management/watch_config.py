@@ -26,7 +26,6 @@ class WatchdogConfig:
         self.__call_back()
 
     def on_modified(self, event):
-        #print("CHG")
         self.__logger.write(Logging.INF, "Modified: " + event.src_path)
         self.__call_back()
 
