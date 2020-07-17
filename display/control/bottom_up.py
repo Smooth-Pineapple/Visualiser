@@ -8,9 +8,13 @@ from datetime import datetime
 from display.control.samplebase import SampleBase
 
 class BottomUp(SampleBase):
+    STOP_LOOP = False
+
     def __init__(self,  colour, brightness, *args, **kwargs):
         super(BottomUp, self).__init__(*args, **kwargs)
 
+        BottomUp.STOP_LOOP = False
+        
         rgb = []
         for s in re.findall(r'\b\d+\b', colour):
             rgb.append(int(s))
@@ -18,12 +22,14 @@ class BottomUp(SampleBase):
         self.colour = rgb
 
         self.brightness = int(brightness)
+        self.stop_me = False
 
     def drawBarRow(self, offset_canvas, bar, y, r, g, b, bar_width, height):
         for x in range(bar * bar_width, (bar + 1) * bar_width):
             offset_canvas.SetPixel(x, height - 1 - y, r, g, b)
 
     def run(self):
+        print("RROOON")
         num_bars = 16
 
         width = self.matrix.width
@@ -54,7 +60,8 @@ class BottomUp(SampleBase):
         offset_canvas = self.matrix.CreateFrameCanvas()
 
         t = 0
-        while True:
+        print("YOYOYO " + str(BottomUp.STOP_LOOP))
+        while not BottomUp.STOP_LOOP:
             if t % 8 == 0:
                 for x in range(0, num_bars):
                     bar_means[x] += random.randint(0, 2)
@@ -92,6 +99,7 @@ class BottomUp(SampleBase):
             time.sleep(0.1)
             offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
 
-    def stop(self):
-        super.stop()
-
+    @staticmethod 
+    def stop():
+        print("STOP ACTIVATED")
+        BottomUp.STOP_LOOP = True

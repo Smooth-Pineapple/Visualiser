@@ -23,11 +23,12 @@ class WatchdogConfig:
 
     def on_created(self, event):
         self.__logger.write(Logging.INF, "Created: " + event.src_path)
-        self.__call_back(parse_ip=False)
+        self.__call_back()
 
     def on_modified(self, event):
+        #print("CHG")
         self.__logger.write(Logging.INF, "Modified: " + event.src_path)
-        self.__call_back(parse_ip=False)
+        self.__call_back()
 
     def start_observing(self):
         self.__watchdog_observer.start()

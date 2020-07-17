@@ -25,6 +25,7 @@ class Control():
 
     def get_config(self, parse_ip):
         config_data, config_error = DataExtraction.verify_config_data(FileManagement.read_json(config_path, log_path), self.colour_key, self.pattern_key, self.brightness_key, log_path)
+        #config_data, config_error = DataExtraction.verify_config_data(FileManagement.read_json(config_path, log_path), self.colour_key, self.pattern_key, self.brightness_key, log_path)
 
         ip = None
 
@@ -54,25 +55,32 @@ class Control():
 
         return ip, colour, pattern, brightness
 
+    def stop(self):
+        BottomUp.stop()
+
     def load_display(self, parse_ip):
+        print("LOAD")
         ip, colour, pattern, brightness = self.get_config(parse_ip)
-        print("Calls")
+
         #if ip is not None:
         #   show symbol
         print(ip, colour, pattern, brightness)
-        if self.display_pattern is not None:
-            print("stap")
-            self.display_pattern.stop()
-            self.display_pattern = None
+        #if self.display_pattern is not None:
+        #    print("TRY")
+        #    self.display_pattern.stop()
+        #    self.display_pattern = None
 
         if pattern == '1':
-            print("restart")
             self.display_pattern = BottomUp(colour=colour, brightness=brightness)
 
         
         if self.display_pattern is not None:
-            print("process")
+            print("STRT")
+            #display_thread = threading.Thread(target=self.display_pattern.process)
+            #display_thread.start()
             self.display_pattern.process()
+            print("STUUP")
+            
 
 
 if __name__ == '__main__':
@@ -81,12 +89,27 @@ if __name__ == '__main__':
 
     control = Control()
 
-    monitor_config = WatchdogConfig(control.load_display, config_dir, '*.txt', '', True, False, False, log_path)
+    monitor_config = WatchdogConfig(control.stop, config_dir, '*.txt', '', True, False, False, log_path)
+    #monitor_config.start_observing()
+    monitor_thread = threading.Thread(target=monitor_config.start_observing)
+    monitor_thread.start()
     
+
     try:
-        monitor_thread = threading.Thread(target=monitor_config.start_observing())
+        while True:
+            control.load_display(False)
+    except KeyboardInterrupt:
+        print("END")
+        sys.exit(0)
+
+
+    
+    """
+    try:
         monitor_thread.start()
     except Exception as e:
-        logger.write(Logging.ERR, "Monitoring thread stopped: " + str(e)) 
+        logger.write(Logging.ERR, "Display thread stopped: " + str(e)) 
+    """
 
-    control.load_display(True)    
+    
+      

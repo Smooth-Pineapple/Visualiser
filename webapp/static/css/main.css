@@ -24,9 +24,12 @@
     outline: 2px solid #12ED9F;
 }
 
-/*.rad:hover + img {
-    outline: 2px solid #f0c49b;;
-}*/
+.range_symbols {
+    color: #12ED9F; 
+    font-size: 30px; 
+    vertical-align: top;
+    text-align: center;
+}
 
 [type=submit] {
     border: 1px solid #12ED9F;

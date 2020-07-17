@@ -35,8 +35,10 @@
          </label>
          
          <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SET_BRIGHTNESS}}</h2>
+         <span class="range_symbols">-</span>
          <input type="range" min="0" max="100" name="colour-brightness" id="brightnessSet" value='{{config_data[brightness_key]}}' oninput="brightnessGet.value = brightnessSet.value"/>
-         <output style="color: #12ED9F; font-size: 30px; vertical-align: top;" name="colour-brightness-display" id="brightnessGet">{{config_data[brightness_key]}}</output>
+         <span class="range_symbols">+</span>
+         <output class="range_symbols" name="colour-brightness-display" id="brightnessGet">{{config_data[brightness_key]}}</output>
 
          <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SET_COLOUR}}</h2>
          <input class='colorpicker' name="colour-picker" value='{{config_data[colour_key]}}'/>

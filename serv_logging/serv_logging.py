@@ -31,9 +31,10 @@ class Logging:
     def open(self, path_str):
         self.__path_str = path_str
 
-        self.fileSizeCheck()
+        if self.__log_file is None: 
+            self.fileSizeCheck()
 
-        self.__log_file = open(self.__path_str , 'a+')
+            self.__log_file = open(self.__path_str , 'a+')
 
     def write(self, level, message):
         if self.__log_file is not None:
