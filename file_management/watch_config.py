@@ -6,6 +6,8 @@ from watchdog.events import PatternMatchingEventHandler
 from serv_logging.serv_logging import Logging
 
 class WatchdogConfig:
+    STOP_LOOP = False
+
     def __init__(self, call_back, path, file_pattern, ignore_pattern, ignore_dirs, recursive, case_sensitive, log_path):
         self.__logger = Logging.getInstance(Logging.DEB)
         self.__logger.open(log_path)
@@ -32,9 +34,13 @@ class WatchdogConfig:
     def start_observing(self):
         self.__watchdog_observer.start()
         try:
-            while True:
+            while not WatchdogConfig.STOP_LOOP:
                 time.sleep(1)
         except (Exception, KeyboardInterrupt) as e:
+            #self.__watchdog_observer.stop()
+            #self.__watchdog_observer.join()
+            self.__logger.write(Logging.WAR, "Stopped observing config: " + str(e))
+        finally:
             self.__watchdog_observer.stop()
             self.__watchdog_observer.join()
-            self.__logger.write(Logging.WAR, "Stopped observing config: " + str(e))
+            self.__logger.write(Logging.WAR, "Stopped observing config gracefully")

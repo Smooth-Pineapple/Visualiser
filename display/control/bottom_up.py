@@ -2,7 +2,7 @@ import math
 import time
 import random
 import re
-
+import sys
 from datetime import datetime
 
 from display.control.samplebase import SampleBase
@@ -58,44 +58,52 @@ class BottomUp(SampleBase):
 
         offset_canvas = self.matrix.CreateFrameCanvas()
 
-        t = 0
-        while not BottomUp.STOP_LOOP:
-            if t % 8 == 0:
+        try:
+            t = 0
+            while not BottomUp.STOP_LOOP:
+                if t % 8 == 0:
+                    for x in range(0, num_bars):
+                        bar_means[x] += random.randint(0, 2)
+                        if bar_means[x] >= num_means:
+                            bar_means[x] = num_means - 1
+                        if bar_means[x] < 0:
+                            bar_means[x] = 0
+            
+                t += 1
                 for x in range(0, num_bars):
-                    bar_means[x] += random.randint(0, 2)
-                    if bar_means[x] >= num_means:
-                        bar_means[x] = num_means - 1
-                    if bar_means[x] < 0:
-                        bar_means[x] = 0
-        
-            t += 1
-            for x in range(0, num_bars):
-                bar_heights[x] = (height - means[bar_means[x]]) * math.sin(0.1 * t * bar_freqs[x]) + means[bar_means[x]]
-                if bar_heights[x] < height / 8:
-                    bar_heights[x] = random.randint(1, (height / 8))
+                    bar_heights[x] = (height - means[bar_means[x]]) * math.sin(0.1 * t * bar_freqs[x]) + means[bar_means[x]]
+                    if bar_heights[x] < height / 8:
+                        bar_heights[x] = random.randint(1, (height / 8))
 
-            for x in range(0, num_bars):
-                y = 0
-                for i in range(0, int(bar_heights[x])):
-                    y = i
-                    """
-                    if y < height_green:
-                        self.drawBarRow(offset_canvas, x, y, 0, 200, 0, bar_width, height)
-                    elif y < height_yellow:
-                        self.drawBarRow(offset_canvas, x, y, 150, 150, 0, bar_width, height)
-                    elif y < height_orange:
-                        self.drawBarRow(offset_canvas, x, y, 250, 100, 0, bar_width, height)
-                    else:
-                    """
-                    self.colour
-                    self.drawBarRow(offset_canvas, x, y, self.colour[0], self.colour[1], self.colour[2], bar_width, height)
+                for x in range(0, num_bars):
+                    y = 0
+                    for i in range(0, int(bar_heights[x])):
+                        y = i
+                        """
+                        if y < height_green:
+                            self.drawBarRow(offset_canvas, x, y, 0, 200, 0, bar_width, height)
+                        elif y < height_yellow:
+                            self.drawBarRow(offset_canvas, x, y, 150, 150, 0, bar_width, height)
+                        elif y < height_orange:
+                            self.drawBarRow(offset_canvas, x, y, 250, 100, 0, bar_width, height)
+                        else:
+                        """
+                        #self.drawBarRow(offset_canvas, x, y, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), bar_width, height)
+                        if self.colour == [0, 0, 0, 0]:
+                            self.drawBarRow(offset_canvas, x, y, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), bar_width, height)
+                        else:
+                            self.drawBarRow(offset_canvas, x, y, self.colour[0], self.colour[1], self.colour[2], bar_width, height)
 
-                for k in range(y, height):
-                    y = k
-                    self.drawBarRow(offset_canvas, x, y, 0, 0, 0, bar_width, height)
+                    for k in range(y, height):
+                        y = k
+                        self.drawBarRow(offset_canvas, x, y, 0, 0, 0, bar_width, height)
 
-            time.sleep(0.1)
-            offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
+                time.sleep(0.1)
+                offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
+        except KeyboardInterrupt:
+            BottomUp.stop()
+            #sys.exit(0)
+            raise KeyboardInterrupt()
 
     @staticmethod 
     def stop():

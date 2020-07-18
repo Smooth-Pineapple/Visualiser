@@ -95,4 +95,6 @@ if __name__ == '__main__':
         while True:
             control.load_display(False)
     except KeyboardInterrupt:
+        WatchdogConfig.STOP_LOOP = True
+        monitor_thread.join()
         sys.exit(0)
