@@ -6,12 +6,17 @@ import sys
 from datetime import datetime
 
 from display.control.samplebase import SampleBase
+from serv_logging.serv_logging import Logging
 
 class BottomUp(SampleBase):
     STOP_LOOP = False
 
-    def __init__(self,  colour, brightness, *args, **kwargs):
+    def __init__(self,  colour, brightness, input_stream, audio_spectrum, spectrum_analysis, display_spectrum, log_path, *args, **kwargs):
         super(BottomUp, self).__init__(*args, **kwargs)
+        self.__logger = Logging.getInstance(Logging.DEB)
+        self.__logger.open(log_path)
+        
+        self.__logger.write(Logging.DEB, "Starting Bottom Up display")
 
         BottomUp.STOP_LOOP = False
         
@@ -19,6 +24,11 @@ class BottomUp(SampleBase):
         for s in re.findall(r'\b\d+\b', colour):
             rgb.append(int(s))
 
+        self.input_stream = input_stream
+        self.audio_spectrum = audio_spectrum
+        self.spectrum_analysis = spectrum_analysis
+        self.display_spectrum = display_spectrum
+        
         self.colour = rgb
 
         self.brightness = int(brightness)
@@ -35,60 +45,27 @@ class BottomUp(SampleBase):
         height = self.matrix.height
 
         self.matrix.brightness = self.brightness
-
+  
         bar_width = width / num_bars
-        bar_heights = [None] * num_bars
-        bar_means = [None] * num_bars
-        bar_freqs = [None] * num_bars
-
-        height_green = height * 4/12
-        height_yellow = height * 8/12
-        height_orange = height * 10/12
-        height_red = height * 12/12
-
-        num_means = 10 
-        means = [1,2,3,4,5,6,7,8,16,32]
-        for x in range(0, num_means):
-            means[x] = height - means[x] * height / 8
-        
-        random.seed(datetime.now())
-        for x in range(0, num_bars):
-            bar_means[x] = random.randint(0, 10)
-            bar_freqs[x] = 1 << random.randint(0, 3)
 
         offset_canvas = self.matrix.CreateFrameCanvas()
 
         try:
             t = 0
             while not BottomUp.STOP_LOOP:
-                if t % 8 == 0:
-                    for x in range(0, num_bars):
-                        bar_means[x] += random.randint(0, 2)
-                        if bar_means[x] >= num_means:
-                            bar_means[x] = num_means - 1
-                        if bar_means[x] < 0:
-                            bar_means[x] = 0
-            
-                t += 1
-                for x in range(0, num_bars):
-                    bar_heights[x] = (height - means[bar_means[x]]) * math.sin(0.1 * t * bar_freqs[x]) + means[bar_means[x]]
-                    if bar_heights[x] < height / 8:
-                        bar_heights[x] = random.randint(1, (height / 8))
+                self.input_stream.tick_input_stream()
+                self.audio_spectrum.set_audio_data(self.input_stream.get_input_data())
+                self.audio_spectrum.data_to_spectrum()
+
+                self.spectrum_analysis.set_spectrum(self.audio_spectrum.get_spectrum())
+
+                bar_heights = self.display_spectrum.tick(self.spectrum_analysis.get_amplitude_array(num_bars), num_bars)
 
                 for x in range(0, num_bars):
                     y = 0
                     for i in range(0, int(bar_heights[x])):
                         y = i
-                        """
-                        if y < height_green:
-                            self.drawBarRow(offset_canvas, x, y, 0, 200, 0, bar_width, height)
-                        elif y < height_yellow:
-                            self.drawBarRow(offset_canvas, x, y, 150, 150, 0, bar_width, height)
-                        elif y < height_orange:
-                            self.drawBarRow(offset_canvas, x, y, 250, 100, 0, bar_width, height)
-                        else:
-                        """
-                        #self.drawBarRow(offset_canvas, x, y, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), bar_width, height)
+                        
                         if self.colour == [0, 0, 0, 0]:
                             self.drawBarRow(offset_canvas, x, y, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), bar_width, height)
                         else:
@@ -102,7 +79,10 @@ class BottomUp(SampleBase):
                 offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
         except KeyboardInterrupt:
             BottomUp.stop()
-            #sys.exit(0)
+            raise KeyboardInterrupt()
+        except ValueError as e:
+            logger.write(Logging.ERR, "Exception with displaying Bottom Up style: " + str(e))
+            BottomUp.stop()
             raise KeyboardInterrupt()
 
     @staticmethod 
