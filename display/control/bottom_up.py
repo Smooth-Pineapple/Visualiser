@@ -39,12 +39,12 @@ class BottomUp(SampleBase):
             offset_canvas.SetPixel(x, height - 1 - y, r, g, b)
 
     def run(self):
+        self.matrix.brightness = self.brightness
+        
         num_bars = 16
 
         width = self.matrix.width
         height = self.matrix.height
-
-        self.matrix.brightness = self.brightness
   
         bar_width = width / num_bars
 

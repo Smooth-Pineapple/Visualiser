@@ -1,4 +1,6 @@
 import time
+import math
+
 from display.control.samplebase import SampleBase
 
 class NetworkNotification(SampleBase):
@@ -9,22 +11,32 @@ class NetworkNotification(SampleBase):
         self.have_ip = have_ip
 
     def run(self):
-        cent_x = self.matrix.width / 2
-        cent_y = self.matrix.height / 2
+        self.matrix.brightness = self.brightness
+
+        #cent_x = self.matrix.width / 2
+        #cent_y = self.matrix.height / 2
 
         quart_x = self.matrix.width / 4
-        quart_y = self.matrix.height / 4
+        #quart_y = self.matrix.height / 4
 
+        n = 100
+        radius = 14
+        angle = 0
+        step = 360/n
+        pi_over180 = 3.14159265 / 180.0
 
         offset_canvas = self.matrix.CreateFrameCanvas()
 
         t_end = time.time() + 5
         while time.time() < t_end:
-                for x in range(cent_x - quart_x, cent_x + quart_x):
-                    for y in range(cent_y - quart_y, cent_y + quart_y):
-                        if self.have_ip is False:
-                            offset_canvas.SetPixel(x, y, 255, 0, 0)
-                        else:
-                            offset_canvas.SetPixel(x, y, 0, 255, 0)
+            for _ in range(0, n):
+                x = ((math.cos(angle * pi_over180) * radius * 2) + 31) * 0.5
+                x = x + quart_x
+                y = ((math.sin(angle * pi_over180) * radius * 2) + 31) * 0.5
+                if self.have_ip is False:
+                    offset_canvas.SetPixel(x, y, 255, 0, 0)
+                else:
+                    offset_canvas.SetPixel(x, y, 0, 255, 0)
+                angle = angle + step
 
-                offset_canvas = self.matrix.SwapOnVSync(offset_canvas)
+            offset_canvas = self.matrix.SwapOnVSync(offset_canvas)

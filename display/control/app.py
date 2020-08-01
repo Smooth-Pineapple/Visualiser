@@ -10,6 +10,7 @@ from file_management.file_management import FileManagement
 from file_management.data_extraction import DataExtraction
 from file_management.watch_config import WatchdogConfig
 from display.control.bottom_up import BottomUp
+from display.control.block import Block
 from display.control.network_notification import NetworkNotification
 
 from display.audio.input_stream import InputStream
@@ -93,6 +94,8 @@ class Control():
 
         if pattern == '1':
             self.display_pattern = BottomUp(colour=colour, brightness=brightness, input_stream=self.input_stream, audio_spectrum=self.audio_spectrum, spectrum_analysis=self.spectrum_analysis, display_spectrum=self.display_spectrum, log_path=log_path)
+        elif pattern == '2':
+            self.display_pattern = Block(colour=colour, brightness=brightness, input_stream=self.input_stream, audio_spectrum=self.audio_spectrum, spectrum_analysis=self.spectrum_analysis, display_spectrum=self.display_spectrum, log_path=log_path)
 
         
         if self.display_pattern is not None:
@@ -112,7 +115,7 @@ if __name__ == '__main__':
     
     control.load_audio_dev()
     try:
-        #control.ip_check_display()
+        control.ip_check_display()
         while True:
             control.load_display(False)
     except KeyboardInterrupt:
