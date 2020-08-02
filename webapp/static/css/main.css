@@ -1,3 +1,9 @@
+.sub_header {
+    padding-left: 50px;
+    color: #12ED9F; 
+    font-size: 30px
+}
+
 .rad{
     position: absolute;
     opacity: 0;
@@ -7,8 +13,8 @@
 
 .rad + img {
     cursor: pointer;
-    width: 100px;
-    height: 60px;
+    width: 200px;
+    height: 120px;
 }
 
 .rad:checked + img {
@@ -16,13 +22,13 @@
 }
 
 .flag {
-    width: 100px;
-    height: 60px;
+    width: 200px;
+    height: 120px;
 }
 
 .flag_border {
-    width: 100px;
-    height: 60px;
+    width: 200px;
+    height: 120px;
     outline: 2px solid #12ED9F;
 }
 
@@ -50,20 +56,20 @@
 }
 
 input[type=range] {
-    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-    width: 100%; /* Specific width is required for Firefox. */
-    background: transparent; /* Otherwise white in Chrome */
+    -webkit-appearance: none; 
+    width: 100%; 
+    background: transparent;
 }
   
 input[type='range'] {
     overflow: hidden;
-    width: 200px;
+    width: 400px;
     -webkit-appearance: none;
     background-color: #ffffff;
 }
   
 input[type='range']::-webkit-slider-runnable-track {
-    height: 30px;
+    height: 60px;
     -webkit-appearance: none;
     color: #13bba4;
 
@@ -71,13 +77,13 @@ input[type='range']::-webkit-slider-runnable-track {
 }
   
 input[type='range']::-webkit-slider-thumb {
-    width: 10px;
+    width: 30px;
     -webkit-appearance: none;
-    height: 30px;
+    height: 60px;
     cursor: ew-resize;
     background: #f0c49b;
     border: 1px solid transparent;
-    box-shadow: -100px 0 0 100px #12ED9F;
+    box-shadow: -400px 0 0 400px #12ED9F;
 }
 
 input[type=range]:focus {
@@ -86,4 +92,10 @@ input[type=range]:focus {
 
 input[type=range]:focus::-webkit-slider-runnable-track {
     background: white;
+}
+
+.range_symbols {
+    color: #12ED9F; 
+    text-align: center;
+    font-size: 25px;
 }

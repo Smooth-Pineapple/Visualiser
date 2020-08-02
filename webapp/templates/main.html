@@ -12,34 +12,41 @@
       <form action="/config-mod" method="POST">
          <h1 style="color: #12ED9F; text-align:center; font-size: 33px;">{{translations.VISUALISER_CONFIGURATION}}</h1>
          
-         <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SELECT_LANGUAGE}}</h2>
+         <h2 class="sub_header">{{translations.SELECT_LANGUAGE}}</h2>
+         <div style="text-align:center;">
+            {% for lan in language_set|reverse %}
+               <a href="/set_lang?lang={{lan}}"><img {% if lang == lan %} class="flag_border" {% else %} class="flag" {% endif %} src="{{url_for('static', filename='/../images/' + lan + '.png')}}"></a>
+            {% endfor %}
+         </div>
+
+         <h2 class="sub_header">{{translations.SELECT_VISUALISER_PATTERN}}</h2>
+         <div style="text-align:center;">
+            <label>
+               <input class="rad" type="radio" name="pattern-options" value="1" {% if config_data[pattern_key] =="1" %} checked {% endif %}>
+               <img src="{{url_for('static', filename='/../images/pattern_1.jpg')}}">
+            </label>
+
+            <label>
+               <input class="rad" type="radio" name="pattern-options" value="2" {% if config_data[pattern_key] =="2" %} checked {% endif %}>
+               <img src="{{url_for('static', filename='/../images/pattern_2.jpg')}}">
+            </label>
+
+            <label>
+               <input class="rad" type="radio" name="pattern-options" value="3" {% if config_data[pattern_key] =="3" %} checked {% endif %}>
+               <img src="http://placehold.it/40x60/b0f/fff&text=C">
+            </label>
+         </div>
          
-         {% for lan in language_set|reverse %}
-            <a href="/set_lang?lang={{lan}}"><img {% if lang == lan %} class="flag_border" {% else %} class="flag" {% endif %} src="{{url_for('static', filename='/../images/' + lan + '.png')}}"></a>
-         {% endfor %}
+         <h2 class="sub_header">{{translations.SET_BRIGHTNESS}}</h2>
+         <div style="text-align:center;">
+            <input type="range" min="0" max="100" name="colour-brightness" id="brightnessSet" value='{{config_data[brightness_key]}}' oninput="brightnessGet.value = brightnessSet.value"/>
+            <!--<output class="range_symbols" name="colour-brightness-display" id="brightnessGet">{{config_data[brightness_key]}}</output>-->
+         </div>
 
-         <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SELECT_VISUALISER_PATTERN}}</h2>
-         <label>
-            <input class="rad" type="radio" name="pattern-options" value="1" {% if config_data[pattern_key] =="1" %} checked {% endif %}>
-            <img src="{{url_for('static', filename='/../images/pattern_1.jpg')}}">
-         </label>
-
-         <label>
-            <input class="rad" type="radio" name="pattern-options" value="2" {% if config_data[pattern_key] =="2" %} checked {% endif %}>
-            <img src="{{url_for('static', filename='/../images/pattern_2.jpg')}}">
-         </label>
-
-         <label>
-            <input class="rad" type="radio" name="pattern-options" value="3" {% if config_data[pattern_key] =="3" %} checked {% endif %}>
-            <img src="http://placehold.it/40x60/b0f/fff&text=C">
-         </label>
-         
-         <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SET_BRIGHTNESS}}</h2>
-         <input type="range" min="0" max="100" name="colour-brightness" id="brightnessSet" value='{{config_data[brightness_key]}}' oninput="brightnessGet.value = brightnessSet.value"/>
-         <output class="range_symbols" name="colour-brightness-display" id="brightnessGet">{{config_data[brightness_key]}}</output>
-
-         <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SET_COLOUR}}</h2>
-         <input class='colorpicker' name="colour-picker" value='{{config_data[colour_key]}}'/>
+         <h2 class="sub_header">{{translations.SET_COLOUR}}</h2>
+         <div style="text-align:center;">
+            <input class='colorpicker' name="colour-picker" value='{{config_data[colour_key]}}'/>
+         </div>
 
          <p></p>
 
