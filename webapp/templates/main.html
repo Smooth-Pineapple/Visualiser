@@ -21,12 +21,12 @@
          <h2 style="color: #12ED9F; font-size: 30px;">{{translations.SELECT_VISUALISER_PATTERN}}</h2>
          <label>
             <input class="rad" type="radio" name="pattern-options" value="1" {% if config_data[pattern_key] =="1" %} checked {% endif %}>
-            <img src="http://placehold.it/40x60/0bf/fff&text=A">
+            <img src="{{url_for('static', filename='/../images/pattern_1.jpg')}}">
          </label>
 
          <label>
             <input class="rad" type="radio" name="pattern-options" value="2" {% if config_data[pattern_key] =="2" %} checked {% endif %}>
-            <img src="http://placehold.it/40x60/b0f/fff&text=B">
+            <img src="{{url_for('static', filename='/../images/pattern_2.jpg')}}">
          </label>
 
          <label>
