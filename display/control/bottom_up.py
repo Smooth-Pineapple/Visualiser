@@ -27,7 +27,6 @@ class BottomUp(SampleBase):
         bar_width = self.width / num_bars
 
         try:
-            t = 0
             while not SampleBase.STOP_LOOP:
                 bar_heights = self.get_bar_heights(num_bars)
 
