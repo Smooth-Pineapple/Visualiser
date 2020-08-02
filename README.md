@@ -113,4 +113,4 @@ exit 0
 
 * Processing of audio **HEAVLY** based on the work by *Thomas Kou and Hansson Lin* (https://github.com/thomaskou/RGB-Matrix-Audio-Visualizer)
 
-* RGB display code **HEAVLY** based on the work on *hzeller* (https://github.com/hzeller/rpi-rgb-led-matrix)
+* RGB display code **HEAVLY** based on the work by *hzeller* (https://github.com/hzeller/rpi-rgb-led-matrix)
