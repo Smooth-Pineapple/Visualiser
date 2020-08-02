@@ -6,6 +6,8 @@
  * flask-bootstrap - Ver. 3.3.7.1 (https://github.com/mbr/flask-bootstrap)
  * Watchdog - Ver. 0.10.3 (https://github.com/gorakhargosh/watchdog)
  * Pillow - Ver. 2.2.2 (https://python-imaging.github.io/)
+ * Numpy - Ver. 1.19.1 (https://github.com/numpy/numpy)
+ * PyAudio - Ver. 0.2.11 (http://people.csail.mit.edu/hubert/pyaudio/)
 
 ### Installation
 
@@ -41,10 +43,6 @@ if [ -f "$VCONF_S" ]; then
     fi
 fi
 
-#Run Visualiser code
-#cd /home/pi/Visualiser/webapp
-#sudo python app.py &
-
 exit 0
 </code></pre>
 
@@ -78,6 +76,9 @@ exit 0
 	sh /home/pi/start-visualiser-server.sh
 	cd /home/pi/Visualiser/webapp
 	python app.py "$_IP" &
+
+	cd /home/pi/Visualiser/display/control
+	python app.py &
 	</code></pre>
 
 
@@ -101,7 +102,15 @@ exit 0
  * Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/) 
  * Watchdog - Ver. 0.10.3 (https://github.com/gorakhargosh/watchdog)
  * Pillow - Ver. 2.2.2 (https://python-imaging.github.io/)
-
+ * Numpy - Ver. 1.19.1 (https://github.com/numpy/numpy)
+ * PyAudio - Ver. 0.2.11 (http://people.csail.mit.edu/hubert/pyaudio/)
+ 
 ### Notes
 
+* Installation of PyAudio can be tricky, I found this to be helpful: https://www.raspberrypi.org/forums/viewtopic.php?t=25173
+
 * Installation process and C++ libraries for controlling RGB Matrix HAT found at: https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices
+
+* Processing of audio **HEAVLY** based on the work by *Thomas Kou and Hansson Lin* (https://github.com/thomaskou/RGB-Matrix-Audio-Visualizer)
+
+* RGB display code **HEAVLY** based on the work on *hzeller* (https://github.com/hzeller/rpi-rgb-led-matrix)
