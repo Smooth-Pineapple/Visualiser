@@ -5,7 +5,7 @@ from display.control.samplebase import SampleBase
 
 class NetworkNotification(SampleBase):
     def __init__(self, have_ip, brightness, *args, **kwargs):
-        super(NetworkNotification, self).__init__(*args, **kwargs)
+        super(NetworkNotification, self).__init__(None, brightness, None, None, None, None, *args, **kwargs)
 
         self.brightness = int(brightness)
         self.have_ip = have_ip
@@ -13,11 +13,7 @@ class NetworkNotification(SampleBase):
     def run(self):
         self.matrix.brightness = self.brightness
 
-        #cent_x = self.matrix.width / 2
-        #cent_y = self.matrix.height / 2
-
         quart_x = self.matrix.width / 4
-        #quart_y = self.matrix.height / 4
 
         n = 100
         radius = 14

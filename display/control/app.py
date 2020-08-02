@@ -9,6 +9,7 @@ from serv_logging.serv_logging import Logging
 from file_management.file_management import FileManagement
 from file_management.data_extraction import DataExtraction
 from file_management.watch_config import WatchdogConfig
+from display.control.samplebase import SampleBase
 from display.control.bottom_up import BottomUp
 from display.control.block import Block
 from display.control.network_notification import NetworkNotification
@@ -77,8 +78,8 @@ class Control():
         return ip, colour, pattern, brightness
 
     def stop(self):
-        BottomUp.stop()
-
+        SampleBase.stop()
+        
     def ip_check_display(self):
         ip, _, _, brightness = self.get_config(True)
 	

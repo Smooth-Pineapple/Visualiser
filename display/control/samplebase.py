@@ -2,11 +2,14 @@ import argparse
 import time
 import sys
 import os
+import re
 
 from display.rgbmatrix import RGBMatrix, RGBMatrixOptions
 
 class SampleBase(object):
-    def __init__(self, *args, **kwargs):
+    STOP_LOOP = False
+
+    def __init__(self, colour, brightness, input_stream, audio_spectrum, spectrum_analysis, display_spectrum, *args, **kwargs):
         self.parser = argparse.ArgumentParser()
 
         self.parser.add_argument("-r", "--led-rows", action="store", help="Display rows. 16 for 16x32, 32 for 32x32. Default: 32", default=32, type=int)
@@ -26,11 +29,33 @@ class SampleBase(object):
         self.parser.add_argument("--led-row-addr-type", action="store", help="0 = default; 1=AB-addressed panels;2=row direct", default=0, type=int, choices=[0,1,2])
         self.parser.add_argument("--led-multiplexing", action="store", help="Multiplexing type: 0=direct; 1=strip; 2=checker; 3=spiral; 4=ZStripe; 5=ZnMirrorZStripe; 6=coreman; 7=Kaler2Scan; 8=ZStripeUneven (Default: 0)", default=0, type=int)
 
+        SampleBase.STOP_LOOP = False
+        
+        rgb = []
+        if colour is not None:
+          for s in re.findall(r'\b\d+\b', colour):
+              rgb.append(int(s))
+
+        self.input_stream = input_stream
+        self.audio_spectrum = audio_spectrum
+        self.spectrum_analysis = spectrum_analysis
+        self.display_spectrum = display_spectrum
+        
+        self.colour = rgb
+
+        self.brightness = int(brightness)
+        self.stop_me = False
+
     def usleep(self, value):
         time.sleep(value / 1000000.0)
 
     def run(self):
-        print("Running")
+        self.matrix.brightness = self.brightness
+
+        self.width = self.matrix.width
+        self.height = self.matrix.height
+
+        self.offset_canvas = self.matrix.CreateFrameCanvas()
 
     def process(self):
         self.args = self.parser.parse_args()
@@ -63,3 +88,16 @@ class SampleBase(object):
         self.run()
 
         return True
+
+    def get_bar_heights(self, num_bars):
+      self.input_stream.tick_input_stream()
+      self.audio_spectrum.set_audio_data(self.input_stream.get_input_data())
+      self.audio_spectrum.data_to_spectrum()
+
+      self.spectrum_analysis.set_spectrum(self.audio_spectrum.get_spectrum())
+
+      return self.display_spectrum.tick(self.spectrum_analysis.get_amplitude_array(num_bars), num_bars)
+      
+    @staticmethod 
+    def stop():
+        SampleBase.STOP_LOOP = True
