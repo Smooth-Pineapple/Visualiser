@@ -2,8 +2,8 @@
 
 ### Prerequisites
  * Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/) 
- * flask - Ver. 1.1.2 (https://palletsprojects.com/p/flask/)
- * flask-bootstrap - Ver. 3.3.7.1 (https://github.com/mbr/flask-bootstrap)
+ * Flask - Ver. 1.1.2 (https://palletsprojects.com/p/flask/)
+ * Flask-bootstrap - Ver. 3.3.7.1 (https://github.com/mbr/flask-bootstrap)
  * Watchdog - Ver. 0.10.3 (https://github.com/gorakhargosh/watchdog)
  * Pillow - Ver. 2.2.2 (https://python-imaging.github.io/)
  * Numpy - Ver. 1.19.1 (https://github.com/numpy/numpy)
