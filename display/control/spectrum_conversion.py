@@ -21,12 +21,15 @@ class SpectrumConversion:
             self.moddedArray.append(x2)
         self.moddedArray[0] = int((self.moddedArray[0] + self.moddedArray[1]) / 2)
 
-    def tick(self, freqArray, num_bars):
+    def tick(self, freqArray, num_bars, HACK):
         self.set_array(freqArray)
         self.convert_array(num_bars)
 
         abs_silence = [-14, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -61]
-        max_sound = [46, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 93]
+        if HACK == True:
+            max_sound = [60, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110]
+        else:
+            max_sound = [46, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 93]
         #max_sound = [32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32]
 
             

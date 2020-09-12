@@ -38,7 +38,7 @@ class Block(SampleBase):
 
         try:
             while not SampleBase.STOP_LOOP:
-                bar_heights = self.get_bar_heights(16)
+                bar_heights = self.get_bar_heights(num_bars=16, HACK=True)
 
                 xX = sum(bar_heights)
                 if(xX > 0):

@@ -89,14 +89,14 @@ class SampleBase(object):
 
         return True
 
-    def get_bar_heights(self, num_bars):
+    def get_bar_heights(self, num_bars, HACK = False):
       self.input_stream.tick_input_stream()
       self.audio_spectrum.set_audio_data(self.input_stream.get_input_data())
       self.audio_spectrum.data_to_spectrum()
 
       self.spectrum_analysis.set_spectrum(self.audio_spectrum.get_spectrum())
 
-      return self.display_spectrum.tick(self.spectrum_analysis.get_amplitude_array(num_bars), num_bars)
+      return self.display_spectrum.tick(self.spectrum_analysis.get_amplitude_array(num_bars), num_bars, HACK)
       
     @staticmethod 
     def stop():
