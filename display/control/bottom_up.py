@@ -17,7 +17,7 @@ class BottomUp(SampleBase):
 
     def drawBarRow(self, offset_canvas, bar, y, r, g, b, bar_width, height):
         for x in range(bar * bar_width, (bar + 1) * bar_width):
-            self.offset_canvas.SetPixel(x, height - 1 - y, r, g, b)
+            offset_canvas.SetPixel(x, height - 1 - y, r, g, b)
 
     def run(self):
         super(BottomUp, self).run() 

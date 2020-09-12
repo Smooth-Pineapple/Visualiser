@@ -24,10 +24,12 @@ class SpectrumConversion:
     def tick(self, freqArray, num_bars):
         self.set_array(freqArray)
         self.convert_array(num_bars)
-        abs_silence = [-14, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -61]
-        #max_sound = [46, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 93]
-        max_sound = [60, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110]
 
+        abs_silence = [-14, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -59, -61]
+        max_sound = [46, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 93]
+        #max_sound = [32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32]
+
+            
         fitted_arr = []
         for x in range(0, len(self.moddedArray)):
             self.moddedArray[x] = abs(abs_silence[x] - self.moddedArray[x])
