@@ -37,7 +37,7 @@ class DataExtraction:
         elif not config_data[colour_key]:
             config_data[colour_key] = 'rgba(0,0,0,0)'
 
-        if (pattern_key not in config_data or not config_data[pattern_key]) or DataExtraction.__is_config_int(config_data[pattern_key], pattern_key, 1, 3, log_path) is False:
+        if (pattern_key not in config_data or not config_data[pattern_key]) or DataExtraction.__is_config_int(config_data[pattern_key], pattern_key, 1, 4, log_path) is False:
             config_data[pattern_key] = '1'
             logger.write(Logging.WAR, "Pattern key not present, setting to default") 
             config_error = True

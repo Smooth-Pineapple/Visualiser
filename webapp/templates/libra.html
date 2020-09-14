@@ -1,0 +1,34 @@
+<html>
+   <head>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+      <script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+      {{ colorpicker.loader() }}
+      {{ colorpicker.picker(ids=['.colorpicker'], color_format='rgb', showAlpha='false', showButtons='true', cancelText=translations.CANCEL, chooseText=translations.CHOOSE) }}
+      
+      <title>{{translations.VISUALISER_CONFIGURATION}}</title>
+   </head>
+   <body>
+      <div class="home_container">
+         <a href="/"><img class="home_icon" src="{{url_for('static', filename='/../images/home.png')}}"></a>
+       </div>
+
+      <form action="/config-mod-libra" method="POST">
+         <h1 style="color: #12ED9F; text-align:center; font-size: 33px;">{{translations.LIBRA_CONFIGURATION}}</h1>
+
+         <h2 class="sub_header">{{translations.SET_COLOUR}}</h2>
+         <div style="text-align:center;">
+            <input class='colorpicker' name="colour-picker" value='{{config_data[colour_key]}}'/>
+         </div>
+
+         <p></p>
+
+         <div style="text-align:center;">
+            <input type="submit" name="apply" value="{{translations.APPLY}}" style="color: #12ED9F;">
+            <input type="submit" name="cancel" value="{{translations.CANCEL}}" style="color: #12ED9F;">
+         </div>
+      </form>
+      <form action="/shutdown" method="POST" style="text-align:center;">
+         <input type="submit" name="shutdown" value="{{translations.SHUTDOWN}}" style="color: #12ED9F; background: #f33333;">
+      </form>
+   </body>
+</html>

@@ -13,6 +13,7 @@ from display.control.samplebase import SampleBase
 from display.control.bottom_up import BottomUp
 from display.control.block import Block
 from display.control.sparkle import Sparkle
+from display.control.libra import Libra
 from display.control.network_notification import NetworkNotification
 
 from display.audio.input_stream import InputStream
@@ -100,7 +101,8 @@ class Control():
             self.display_pattern = Block(colour=colour, brightness=brightness, input_stream=self.input_stream, audio_spectrum=self.audio_spectrum, spectrum_analysis=self.spectrum_analysis, display_spectrum=self.display_spectrum, log_path=log_path)
         elif pattern == '3':
             self.display_pattern = Sparkle(colour=colour, brightness=brightness, input_stream=self.input_stream, audio_spectrum=self.audio_spectrum, spectrum_analysis=self.spectrum_analysis, display_spectrum=self.display_spectrum, log_path=log_path)
-
+        elif pattern == '4':
+            self.display_pattern = Libra(colour=colour, brightness=brightness, input_stream=self.input_stream, audio_spectrum=self.audio_spectrum, spectrum_analysis=self.spectrum_analysis, display_spectrum=self.display_spectrum, log_path=log_path)
         
         if self.display_pattern is not None:
             self.display_pattern.process()

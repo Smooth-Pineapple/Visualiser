@@ -99,3 +99,17 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     text-align: center;
     font-size: 25px;
 }
+
+.home_container {
+    width: 90px;
+    border: 2px solid transparent;
+}
+
+.home_container:hover {
+    border-color: #f0c49b;
+}
+
+.home_icon {
+    width: 90px;
+    height:60px;
+}

@@ -71,6 +71,60 @@ def index():
 
     return render_template('/main.html', colour_key=colour_key, pattern_key=pattern_key, brightness_key=brightness_key, config_data=config_data, translations=translation_json, language_set=language_set, lang=config_data['lang'])
 
+@app.route('/libra')
+def libra():
+    logger.write(Logging.DEB, "Libra page") 
+    config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, config_path, log_path)
+    
+    if 'lang' not in config_data or not config_data['lang']:
+        config_data['lang'] = 'it'
+        FileManagement.update_json(config_path, config_data, log_path)
+
+    translation_json = {}
+    if config_data['lang'] in language_set:
+        translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+
+    return render_template('/libra.html', colour_key=colour_key, config_data=config_data, translations=translation_json)
+
+@app.route('/config-mod-libra', methods = ['GET', 'POST'])
+def submit_libra():
+    logger.write(Logging.INF, "Applying libra config") 
+    if 'apply' in request.form:
+        try:
+            colour = request.form.get('colour-picker')
+            pattern_type = "4"
+            brightness = "50"
+    
+            logger.write(Logging.DEB, "Config change libra: " + colour + ", " + pattern_type + ", " + brightness)  
+            config_data = {colour_key: colour, pattern_key: pattern_type, 'brightness': brightness, 'ip': ip}
+
+            FileManagement.update_json(config_path, config_data, log_path)
+        except Exception as e: 
+            logger.write(Logging.ERR, "Error when saving config change libra: " + str(e)) 
+            config_data = DataExtraction.fix_config_data(FileManagement.read_json(config_path, log_path), colour_key, pattern_key, brightness_key, config_path, log_path)
+
+            translation_json = {}
+            if config_data['lang'] in language_set:
+                translation_json = FileManagement.read_json(translations_dir_path + config_data['lang'] + '.json' , log_path)
+
+            translations_config_fail = {
+                'TITLE': "",
+                'MESSAGE': ""
+            }
+
+            if 'TITLE_CONFIG_FAIL' in translation_json:
+                translations_config_fail['TITLE'] = translation_json['TITLE_CONFIG_FAIL']
+
+            if 'MESSAGE_CONFIG_FAIL' in translation_json:
+                translations_config_fail['MESSAGE'] = translation_json['MESSAGE_CONFIG_FAIL']
+
+            return render_template('/sub_page.html', translations=translations_config_fail, lang=config_data['lang'], have_home=True), 500
+    
+    elif 'cancel' in request.form:
+        logger.write(Logging.DEB, "Cancel clicked, so reseting page") 
+
+    return redirect('/libra')
+
 @app.route('/set_lang', methods = ['GET', 'POST'])
 def set_lang():
     lang = 'it'
