@@ -58,6 +58,9 @@
       <form action="/shutdown" method="POST" style="text-align:center;">
          <input type="submit" name="shutdown" value="{{translations.SHUTDOWN}}" style="color: #12ED9F; background: #f33333;">
       </form>
+      <div class="libra_container">
+         <a href="/libra"><img class="libra_icon" src="{{url_for('static', filename='/../images/libra_symbol.png')}}"></a>
+       </div>
       <a href="/dwn-log" style="float: right; font-size: 10px;">{{translations.DOWNLOAD_LOGS}}</a> <br>
       <a href="/view-server-log" style="float: right; font-size: 10px;">{{translations.VIEW_SERVER_LOG}}</a> <br>
       <a href="/view-display-log" style="float: right; font-size: 10px;">{{translations.VIEW_DISPLAY_LOG}}</a>

@@ -113,3 +113,17 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     width: 90px;
     height:60px;
 }
+
+.libra_container {
+    width: 50px;
+    border: 2px solid transparent;
+}
+
+.libra_container:hover {
+    border-color: #f0c49b;
+}
+
+.libra_icon {
+    width: 50px;
+    height:50px;
+}
