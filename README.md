@@ -1,5 +1,13 @@
 # Visualiser
 
+This project contains the code and instructions (*plus links to futher instructions*) for creating a real-time audio visualiser.
+
+This is achieved by connecting a RaspberryPi (tested on [Raspberry Pi 3 Model B+](https://www.amazon.co.uk/Raspberry-Pi-3-Model-B/dp/B07BDR5PDW)), to a LED Matrix (tested on a [64x32 led display](https://www.amazon.co.uk/color-module-resolution-contrast-indoor/dp/B06ZYYDK3B)) via a RGB Hat (tested on [Adafruit RGB Hat](https://www.amazon.co.uk/Adafruit-RGB-Matrix-HAT-Raspberry/dp/B00SK69C6E)), and 
+have it visualise, in real-time, the sound picked up on a USB microphone (tested on [GOBEST USB Microphone](https://www.amazon.co.uk/Microphone-Business-Computer-Portable-Conference/dp/B087Q6MLS9)). There are currently 3 patterns  implemented, but more can be added with relative ease.
+
+The project also contains code for a webapp, allowing users to select patterns, languages (Italian and English, but again more can be added with relative ease), brightness, colours and more! (*well not much more... but still!*)
+
+
 ### Prerequisites
  * Python - Ver. 3.7.1 (https://www.python.org/ftp/python/3.7.1/) 
  * Flask - Ver. 1.1.2 (https://palletsprojects.com/p/flask/)
@@ -109,8 +117,10 @@ exit 0
 
 * Installation of PyAudio can be tricky, I found this to be helpful: https://www.raspberrypi.org/forums/viewtopic.php?t=25173
 
-* Installation process and C++ libraries for controlling RGB Matrix HAT found at: https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices
+* Installation process of RGB Matrix HAT and corresponding C++ libraries for functionality found at: https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices
 
-* Processing of audio **HEAVLY** based on the work by *Thomas Kou and Hansson Lin* (https://github.com/thomaskou/RGB-Matrix-Audio-Visualizer)
+* Processing of audio **HEAVLY** based on the work by *Thomas Kou* and *Hansson Lin* (https://github.com/thomaskou/RGB-Matrix-Audio-Visualizer)
 
 * RGB display code **HEAVLY** based on the work by *hzeller* (https://github.com/hzeller/rpi-rgb-led-matrix)
+
+* I ran out of time/ patience a bit, so there are hacks here and there. For example, the audio spectrum code only supports seperating the data into a maximum of 16 "segments".
