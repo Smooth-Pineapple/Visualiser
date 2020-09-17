@@ -117,7 +117,7 @@ exit 0
 
 * Installation of PyAudio can be tricky, I found this to be helpful: https://www.raspberrypi.org/forums/viewtopic.php?t=25173
 
-* Installation process of RGB Matrix HAT and corresponding C++ libraries for functionality found at: https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices
+* Installation process of RGB Matrix HAT, and corresponding C++ libraries for functionality found at: https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi/driving-matrices
 
 * Processing of audio **HEAVLY** based on the work by *Thomas Kou* and *Hansson Lin* (https://github.com/thomaskou/RGB-Matrix-Audio-Visualizer)
 
