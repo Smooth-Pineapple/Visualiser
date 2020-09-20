@@ -102,7 +102,7 @@ exit 0
 * Includes and modifies 'Flask-Colorpicker' - Ver. 0.9 (https://github.com/mrf345/flask_colorpicker/) to allow custom assignment of picker's 'cancel' and 'choose' buttons.
 
 * Config file format is as follow:
-	<pre><code>{"colour": "rgb([0-255], [0-255], [0-255])", "pattern_type": "[1/2/3]", "ip": "[IP ADDRESS]", "lang": "[en/it]"}</code></pre>
+	<pre><code>{"colour": "rgb([0-255], [0-255], [0-255])", "brightness": "[1-100]", "pattern_type": "[1/2/3]", "ip": "[IP ADDRESS]", "lang": "[en/it]"}</code></pre>
 
 ## Display
 
