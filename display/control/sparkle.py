@@ -37,26 +37,6 @@ class Sparkle(SampleBase):
             offset_canvas.SetPixel(x, height - 1 - y, r, g, b)
             offset_canvas.SetPixel((width - x) - 1, height - 1 - y, r, g, b)
 
-    def drawLibra(self, matrix, offset_canvas, r, g, b, width, height):
-        offset_canvas = matrix.SwapOnVSync(offset_canvas)
-        for x in range(0, width):
-            for y in range(0, height):
-                offset_canvas.SetPixel(x, y, 0, 0, 0)
-        offset_canvas = matrix.SwapOnVSync(offset_canvas)
-
-        libraCoOrd = [(20, 9), (22, 12), (31, 10), (39, 3), (46, 11), (42, 23), (28, 26), (27, 28)]
-        for x, y in libraCoOrd:
-            offset_canvas.SetPixel(x, y, r, g, b)
-
-        offset_canvas = matrix.SwapOnVSync(offset_canvas)
-        
-        time.sleep(0.3)
-        
-        for x in range(0, width):
-            for y in range(0, height):
-                offset_canvas.SetPixel(x, y, 0, 0, 0)
-        offset_canvas = matrix.SwapOnVSync(offset_canvas)
-
     def run(self):
         super(Sparkle, self).run() 
 
@@ -65,24 +45,8 @@ class Sparkle(SampleBase):
         bar_width = (self.width / 2) / num_bars
 
         try:
-            didLibra = False
             while not SampleBase.STOP_LOOP:
                 bar_heights = self.get_bar_heights(num_bars)
-
-                if random.randint(0, 10000) == 28:
-                    if self.colour == [0, 0, 0, 0]:
-                        self.drawLibra(self.matrix, self.offset_canvas, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), self.width, self.height)
-                    else:      
-                        self.drawLibra(self.matrix, self.offset_canvas, self.colour[0], self.colour[1], self.colour[2], self.width, self.height)
-
-                    didLibra = True
-                    continue
-
-                if didLibra == True:
-                    for x in range(0, self.width):
-                        for y in range(0, self.height):
-                            self.offset_canvas.SetPixel(x, y, 0, 0, 0)
-                    self.offset_canvas = self.matrix.SwapOnVSync(self.offset_canvas)
 
                 for x in range(0, num_bars):
                     y = 0
